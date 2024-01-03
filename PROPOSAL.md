@@ -9,20 +9,15 @@ We are creating a multiplayer (2-8 players) hangman game. Players take turns try
     
 # Intended usage:
 
-
 Users connect to a server. The server assigns a random guessing order and word chooser. There will also be an option for the server to choose a random word based on a dictionary. 
 After the game has started, players take turns guessing letter, OR, they have the opportunity to attempt to guess the entire word. After each guess, all connected users get sent the updated status of the game. Throughout the game users can chat with each other. 
+
 # Technical Details:
 
-A description of your technical design. This should include:
-   
-How you will be using the topics covered in class in the project.
-     
-How you are breaking down the project and who is responsible for which parts.
-  
-What data structures you will be using and how.
-     
-What algorithms and /or data structures you will be using, and how.
+Server opens and creates a socket to allow users to connect. All users connect to the same server at once. Server can support up to 8 players at once. Server keeps a list of all connected users stored.
+At the start of the game, the server randomizes the guess order of all users and either prompts the guesser for a word or gets a random dictionary word using WordNet.
+Server prompts one user at a time for a guess of the letter or word and checks it against the true word. True word and hangman status are stored in a .txt file which is sent to all users in human-readable format after each game.
+The whole time, a chat server is open that users can access using a CLI command to communicate with each other over the server. No DMs, just whole group chat.
     
 # Intended pacing:
 
