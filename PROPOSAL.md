@@ -2,16 +2,16 @@
 
 ## Group Members:
 
-names here.
+Charlie Winer, Adrian Veto
        
 # Intentions:
-
-A statement of the problem you are solving and/or a high level description of the project.
+We are creating a multiplayer (2-8 players) hangman game. Players take turns trying to guess a word of variable length. There will be a chat for players to communicate potential guesses with one another. Varying difficulty levels based on word length (ie. more guesses for a 12 letter word than a 5 letter word)
     
 # Intended usage:
 
-A description as to how the project will be used (describe the user interface).
-  
+
+Users connect to a server. The server assigns a random guessing order and word chooser. There will also be an option for the server to choose a random word based on a dictionary. 
+After the game has started, players take turns guessing letter, OR, they have the opportunity to attempt to guess the entire word. After each guess, all connected users get sent the updated status of the game. Throughout the game users can chat with each other. 
 # Technical Details:
 
 A description of your technical design. This should include:
