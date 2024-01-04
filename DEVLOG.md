@@ -3,7 +3,7 @@
 ## Adrian
 
 ### 2024-01-03
-In class: Started PROPOSAL.md, including the overview of what will be done. Brainstorming features. 40min. <br>
+In class: Started PROPOSAL.md, including the overview of what will be done. Brainstorming features. 40min.\
 Home: Finished PROPOSAL.md, which included the timeline of work to do and the breakup of work between group members. Also researched dictionaries to use for the computer word generator. 25min.
 
 ## Charlie
