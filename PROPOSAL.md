@@ -26,4 +26,4 @@ After the game has started, players take turns guessing letter, OR, they have th
 - By Jan 10: Implement blackjack with connections from devices on the server.
 - Jan 10-11: Add random order and words from dictionary. One partner starts working on chat server.
 - Jan 12: Finish all user commands for guesses, chats, etc.
-- By Jan 16: Chat server finished, all commands linked to their functions. Sighandling. Bugfixing and testing on lab machines. Work on presentation.
+- By Jan 16: Chat server finished, all commands linked to their functions. Sighandling. Bugfixing and testing on lab machines. Work on presentation. Final README.md.
