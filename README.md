@@ -7,9 +7,24 @@ Adrian Veto, Charlie Winer
        
 ### Project Description:
 
-Explain what is this project.
+This is a multiplayer hangman game played using terminals. Supports 2-8 players and has chat functionality. 
   
 ### Instructions:
 
 How does the user install/compile/run the program.
+[]
 How does the user interact with this program?
+**Start game**: 
+
+**Choose mode** (either player word or randmom word):
+
+**Choose word**:
+
+**Choose guess type** (either word or letter):
+
+**Make guess**:
+
+**Access chat**:
+
+**Disconnect**:
+
