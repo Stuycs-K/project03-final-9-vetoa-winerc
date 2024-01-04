@@ -16,7 +16,7 @@ How does the user install/compile/run the program.
 How does the user interact with this program?
 **Start game**: 
 
-**Choose mode** (either player word or randmom word):
+**Choose mode** (either player word or random word):
 
 **Choose word**:
 
