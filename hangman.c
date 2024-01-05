@@ -1,9 +1,4 @@
 #include "hangman.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <errno.h>
 
 
 void err(int line) {
@@ -12,13 +7,14 @@ void err(int line) {
 }
 
 char checkLetterGuess(char letter) {
-    int r_file = open("word.txt", O_RDONLY | O_CREAT);
-    if(r_file == -1) {
-        err(17);
+    FILE *r_file
+    char word[21]//max word length of 20 characters
+    int result = 0;
+    r_file = fopen("word.txt", "r");
+    if(r_file == NULL) {
+        err(15);
     }
-    char* targetWord;
-    read(r_file, )
-    if(strstr())
+    
 }
 
 char checkWordGuess(char* word) {
