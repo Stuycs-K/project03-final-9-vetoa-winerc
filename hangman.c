@@ -36,7 +36,7 @@ char checkWordGuess(char* target) {
 
   if(fscanf(r_file, "%20s", word) != 1) err(36);//incorrectly formatted word txt file
   else {
-    if(!strcmp(word, target))
+    if(!strcasecmp(word, target))
       result++; //words don't match so result is false
   }
   guessResult(result);
