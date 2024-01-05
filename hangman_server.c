@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/select.h>
+#define MAX_CLIENTS 8
+#define WORD_SIZE 128
+#define MESSAGE_SIZE 512
 
 void error(int number, char* message) {
     if (number == -1) {
@@ -18,6 +21,9 @@ void error(int number, char* message) {
     }
 }
 
+/*
+    creates the server socket for clients to connect to
+*/
 int server_setup() {
     struct addrinfo * hints, * results;
     hints = calloc(1,sizeof(struct addrinfo));
@@ -44,7 +50,17 @@ int server_setup() {
     return listen_socket;
 }
 
+/*
+    Arguments: the file descriptor of the socket connection that the command is coming from
+    Behavior: Handles the command (if it is a command) or produces an error message
+    Returns: none
+*/
+void handle_command(int client_socket) {
+
+}
+
 int main(){
+    // opens the socket for clients to connect to
     int listen_socket = server_setup();
 
     socklen_t sock_size;
@@ -53,42 +69,59 @@ int main(){
 
     fd_set read_fds;
 
+    // initializes arrays of usernames and of sockets to clients
+    int current_clients = 0;
+    int client_sockets[MAX_CLIENTS];
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        client_sockets[i] = -1;
+    }
+    char usernames[8][WORD_SIZE];
+
     char buff[1025]="";
 
     while(1){
 
         FD_ZERO(&read_fds);
-        FD_SET(STDIN_FILENO, &read_fds);
+        int max_socket = listen_socket;
+        for (int i = 0; i < MAX_CLIENTS; i++) {
+            if (client_sockets[i] != -1) {
+                FD_SET(client_sockets[i], &read_fds);
+                if (client_sockets[i] > max_socket) {
+                    max_socket = client_sockets[i];
+                }
+            }
+        }
         FD_SET(listen_socket,&read_fds);
-        int i = select(listen_socket+1, &read_fds, NULL, NULL, NULL);
+        int i = select(max_socket+1, &read_fds, NULL, NULL, NULL);
 
-        //if standard in, use fgets
-        if (FD_ISSET(STDIN_FILENO, &read_fds)) {
-            fgets(buff, sizeof(buff), stdin);
-            buff[strlen(buff)-1]=0;
-            printf("Recieved from terminal: '%s'\n",buff);
+        // if LISTEN socket -- connect the client to the server
+        if (FD_ISSET(listen_socket, &read_fds)) {
+            if (current_clients == 8) {
+                printf("Server full: no more users allowed\n");
+            }
+            else {
+                //accept the connection
+                int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
+                printf("Connected to new client\n");
+
+                // add the new socket to the list of socket connections
+                for (int i = 0; i < MAX_CLIENTS; i++) {
+                    if (client_sockets[i] != -1) {
+                        client_sockets[i] = client_socket;
+                        current_clients++;
+                    }
+                }
+            }
         }
 
-        // if socket
-        if (FD_ISSET(listen_socket, &read_fds)) {
-            //accept the connection
-            int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
-            printf("Connected, waiting for data.\n");
-
-            //read the whole buff
-            read(client_socket,buff, sizeof(buff));
-            //trim the string
-            buff[strlen(buff)-1]=0; //clear newline
-            if(buff[strlen(buff)-1]==13){
-                //clear windows line ending
-                buff[strlen(buff)-1]=0;
+        //if client socket, handle the command read from the client
+        else {
+            for(int i = 0; i < MAX_CLIENTS; i++) {
+                if (FD_ISSET(client_sockets[i], &read_fds)) {
+                    handle_command(client_sockets[i]);
+                }
             }
-
-            printf("\nRecieved from client '%s'\n",buff);
-            close(client_socket);
         }
     }
-
-
     return 0;
 }
