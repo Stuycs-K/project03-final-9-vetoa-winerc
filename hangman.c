@@ -20,6 +20,12 @@ char checkLetterGuess(char letter) {
       if(strchr(word, letter) != NULL)
         result++; //found the letter so return value is true
     }
+    for(int i = 0; i < word[i] != '\0';i++ ) {
+      if(word[i] == letter) {//compare target word letter by letter with current guess progress
+        //replace asterisk with letter if guess matches
+      } 
+
+    }
     fclose(r_file);
     guessResult(result);
     return result;

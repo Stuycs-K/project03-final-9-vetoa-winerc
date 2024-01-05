@@ -2,7 +2,8 @@
 
 int main() {
     checkLetterGuess('b');
-    checkWordGuess("banana");
+    checkLetterGuess('o');
+    checkWordGuess("horse");
     checkWordGuess("bananaasdfd");
 
 }
