@@ -1,4 +1,5 @@
 #include "hangman_server.h"
+#include "hangman.h"
 #include "networking.h"
 
 /*
@@ -21,14 +22,25 @@ void server_command(struct game_info* game) {
     command[strcspn(command, "\n")] = 0;
 
     //handling commands
+    if (strcmp(command, "help") == 0) {
+        
+    }
+    else if (strcmp(command, "start") == 0) {
+        startGame(game);
+    }
+    else if (strcmp(command, "")) {
 
+    }
+    else {
+        printf("Invalid command. For instructions, type 'help'\n");
+    }
 }
 
 int main(){
     // opens the socket for clients to connect to
     int listen_socket = server_setup();
     fd_set read_fds;
-    struct game_info* game;
+    struct game_info* game = malloc(sizeof(struct game_info*));
     // computer word chooser
     game->gamemode = 0;
     game->num_clients = 0;
@@ -37,7 +49,7 @@ int main(){
     for (int i = 0; i < MAX_CLIENTS; i++) {
         game->usernames[i] = malloc(WORD_SIZE);
     }
-
+    // printf("all memory allocated\n");
     
     // initializes arrays of usernames and of sockets to clients
     for (int i = 0; i < MAX_CLIENTS; i++) {
