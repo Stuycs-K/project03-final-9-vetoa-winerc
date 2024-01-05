@@ -1,3 +1,4 @@
+#include "hangman_server.h"
 #include "networking.h"
 
 /*
@@ -5,7 +6,21 @@
     Behavior: Handles the command (if it is a command) or produces an error message
     Returns: none
 */
-void handle_command(int client_socket) {
+void client_command(int client_socket, struct game_info* game) {
+
+}
+
+/*
+    Arguments: none
+    Behavior: handles commands from the server given through stdin
+    Returns: none
+*/
+void server_command(struct game_info* game) {
+    char command[COMMAND_SIZE] = "";
+    read(fileno(stdin), command, COMMAND_SIZE);
+    command[strcspn(command, "\n")] = 0;
+
+    //handling commands
 
 }
 
@@ -13,26 +28,32 @@ int main(){
     // opens the socket for clients to connect to
     int listen_socket = server_setup();
     fd_set read_fds;
-
-    // initializes arrays of usernames and of sockets to clients
-    int current_clients = 0;
-    int client_sockets[MAX_CLIENTS];
+    struct game_info* game;
+    // computer word chooser
+    game->gamemode = 0;
+    game->num_clients = 0;
+    game->client_sockets = malloc(sizeof(int) * MAX_CLIENTS);
+    game->usernames = malloc(sizeof(char*) * MAX_CLIENTS);
     for (int i = 0; i < MAX_CLIENTS; i++) {
-        client_sockets[i] = -1;
+        game->usernames[i] = malloc(WORD_SIZE);
     }
-    char usernames[8][WORD_SIZE];
 
-    char buff[1025]="";
+    
+    // initializes arrays of usernames and of sockets to clients
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        game->client_sockets[i] = -1;
+    }
 
     while(1){
 
+        // add every socket to the select statement
         FD_ZERO(&read_fds);
         int max_socket = listen_socket;
         for (int i = 0; i < MAX_CLIENTS; i++) {
-            if (client_sockets[i] != -1) {
-                FD_SET(client_sockets[i], &read_fds);
-                if (client_sockets[i] > max_socket) {
-                    max_socket = client_sockets[i];
+            if (game->client_sockets[i] != -1) {
+                FD_SET(game->client_sockets[i], &read_fds);
+                if (game->client_sockets[i] > max_socket) {
+                    max_socket = game->client_sockets[i];
                 }
             }
         }
@@ -41,7 +62,7 @@ int main(){
 
         // if LISTEN socket -- connect the client to the server
         if (FD_ISSET(listen_socket, &read_fds)) {
-            if (current_clients == 8) {
+            if (game->num_clients == 8) {
                 printf("Server full: no more users allowed\n");
             }
             else {
@@ -51,21 +72,26 @@ int main(){
 
                 // add the new socket to the list of socket connections
                 for (int i = 0; i < MAX_CLIENTS; i++) {
-                    if (client_sockets[i] == -1) {
-                        client_sockets[i] = client_socket;
-                        current_clients++;
+                    if (game->client_sockets[i] == -1) {
+                        game->client_sockets[i] = client_socket;
+                        game->num_clients++;
                         break;
                     }
                 }
-                printf("total clients connected: %d\n", current_clients);
+                printf("total clients connected: %d\n", game->num_clients);
             }
+        }
+
+        // if input to the server, handle commands for the server
+        else if (FD_ISSET(fileno(stdin), &read_fds)) {
+            server_command(game);
         }
 
         //if client socket, handle the command read from the client
         else {
             for(int i = 0; i < MAX_CLIENTS; i++) {
-                if (FD_ISSET(client_sockets[i], &read_fds)) {
-                    handle_command(client_sockets[i]);
+                if (FD_ISSET(game->client_sockets[i], &read_fds)) {
+                    client_command(game->client_sockets[i], game);
                 }
             }
         }

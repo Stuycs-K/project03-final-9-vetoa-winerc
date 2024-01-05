@@ -11,6 +11,7 @@
 #include <sys/select.h>
 #define MAX_CLIENTS 8
 #define WORD_SIZE 128
+#define COMMAND_SIZE 128
 #define MESSAGE_SIZE 512
 
 #ifndef NETWORKING_H
