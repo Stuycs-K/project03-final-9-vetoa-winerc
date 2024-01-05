@@ -7,3 +7,4 @@
 void err(int line);
 char checkLetterGuess(char letter);
 char checkWordGuess();
+void guessResult(int result);

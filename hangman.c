@@ -21,9 +21,33 @@ char checkLetterGuess(char letter) {
         result++; //found the letter so return value is true
     }
     fclose(r_file);
+    guessResult(result);
     return result;
 }
 
-char checkWordGuess(char* word) {
+char checkWordGuess(char* target) {
+  FILE *r_file;
+  char word[21];//max word length of 20 characters
+  int result = 0;
+  r_file = fopen("word.txt", "r");
+  if(r_file == NULL) {
+      err(33);
+  }
 
+  if(fscanf(r_file, "%20s", word) != 1) err(36);//incorrectly formatted word txt file
+  else {
+    if(!strcmp(word, target))
+      result++; //words don't match so result is false
+  }
+  guessResult(result);
+  return result; 
+
+  
+}
+
+void guessResult(int result) {
+  if(result)
+    printf("Correct!\n"); //printf for now
+  else 
+    printf("Guess is incorrect\n");
 }
