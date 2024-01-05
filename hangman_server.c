@@ -23,7 +23,11 @@ void server_command(struct game_info* game) {
 
     //handling commands
     if (strcmp(command, "help") == 0) {
-        
+        printf("To start the game, type 'start'\n");
+        printf("To change gamemode, type 'gamemode'\n");
+        printf("To change the word chooser, type 'chooser'\n");
+        printf("To get current game info, type 'status'\n");
+        printf("To end the game, type 'quit'\n");
     }
     else if (strcmp(command, "start") == 0) {
         startGame(game);
