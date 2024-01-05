@@ -21,3 +21,6 @@ At home: Added template for readme. Worked on proposal. 15min.
 In class: Worked on basic hangman functions for either making a letter guess or making a word guess. Tried (and failed) to implement random word functionality. 40min. 
 At home: Finished the word guess and letter guess check methods (using fopen instead). Fixed method so it is case insensitive. Guess methods and guess display methods are functional (will switch off printf for display once combined w/ server. 40min. 
 
+### 2024-01-05
+In class: Handling for guess progress. Guesses are stored in a separate buffer that is updated each time a user makes a letter guess and written into the second line of word.txt. Unknown letters are displayed as asterisks. 40min.
+
