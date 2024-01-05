@@ -17,7 +17,7 @@ At home: Implemented networking procedures for handshakes. Server is now functio
 In class: Came up with idea for hangman game. 40min.
 At home: Added template for readme. Worked on proposal. 15min.
 
-### 2024-01-03 
+### 2024-01-04 
 In class: Worked on basic hangman functions for either making a letter guess or making a word guess. Tried (and failed) to implement random word functionality. 40min. 
-
+At home: Finished the word guess and letter guess check methods (using fopen instead). Fixed method so it is case insensitive. Guess methods and guess display methods are functional (will switch off printf for display once combined w/ server. 40min. 
 
