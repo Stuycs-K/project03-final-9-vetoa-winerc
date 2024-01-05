@@ -13,7 +13,11 @@ At home: Implemented networking procedures for handshakes. Server is now functio
 ## Charlie
 
 
-### 2024-01-03 - Brief description
+### 2024-01-03 
 In class: Came up with idea for hangman game. 40min.
 At home: Added template for readme. Worked on proposal. 15min.
+
+### 2024-01-03 
+In class: Worked on basic hangman functions for either making a letter guess or making a word guess. Tried (and failed) to implement random word functionality. 40min. 
+
 
