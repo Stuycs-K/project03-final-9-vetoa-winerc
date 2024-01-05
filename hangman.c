@@ -9,6 +9,7 @@ void err(int line) {
 char checkLetterGuess(char letter) {
     FILE *r_file;
     char word[21];//max word length of 20 characters
+    char guessProgress[21]; //guess progress (asterisks represent unknowns)
     int result = 0;
     r_file = fopen("word.txt", "r");
     if(r_file == NULL) {
@@ -22,8 +23,11 @@ char checkLetterGuess(char letter) {
     }
     for(int i = 0; i < word[i] != '\0';i++ ) {
       if(word[i] == letter) {//compare target word letter by letter with current guess progress
-        //replace asterisk with letter if guess matches
+        guessProgress[i] = letter; //replace asterisk with letter if guess matches
       } 
+      else {
+        guessProgress[i] = '*'; //keep asterisk an asterisk (need to include for first guess where guess progress is empty)
+      }
 
     }
     fclose(r_file);
@@ -37,7 +41,7 @@ char checkWordGuess(char* target) {
   int result = 0;
   r_file = fopen("word.txt", "r");
   if(r_file == NULL) {
-      err(33);
+      err(40);
   }
 
   if(fscanf(r_file, "%20s", word) != 1) err(36);//incorrectly formatted word txt file
