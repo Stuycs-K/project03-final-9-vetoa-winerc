@@ -51,11 +51,13 @@ int main(){
 
                 // add the new socket to the list of socket connections
                 for (int i = 0; i < MAX_CLIENTS; i++) {
-                    if (client_sockets[i] != -1) {
+                    if (client_sockets[i] == -1) {
                         client_sockets[i] = client_socket;
                         current_clients++;
+                        break;
                     }
                 }
+                printf("total clients connected: %d\n", current_clients);
             }
         }
 

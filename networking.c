@@ -64,7 +64,7 @@ int client_tcp_handshake(char * server_address) {
   hints->ai_family = AF_INET;
   hints->ai_socktype = SOCK_STREAM; //TCP socket
   hints->ai_flags = AI_PASSIVE; //only needed on server
-  error(getaddrinfo(server_address, "3333", hints, &results), "getaddrinfo failed");
+  error(getaddrinfo(server_address, "1738", hints, &results), "getaddrinfo failed");
   
   //create the socket
   int sd = socket(results->ai_family, results->ai_socktype, results->ai_protocol);
