@@ -10,6 +10,9 @@ At home: Finished PROPOSAL.md, which included the timeline of work to do and the
 In class: worked on understanding how multiple clients connect to a server and select command. Implemented demo code. 40min.\
 At home: Implemented networking procedures for handshakes. Server is now functional and accepts multiple connections from pipes, storing them in a list of file descriptors. Clients connect to the server and then finish for now. Server is functional but needs processing for commands sent from clients. 35min.
 
+### 2024-01-05
+In class: Added struct for game info that can be used for executing user and server commands. Started to integrate user and server commands from the terminal and implement server behavior.
+
 ## Charlie
 
 
