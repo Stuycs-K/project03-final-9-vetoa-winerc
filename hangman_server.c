@@ -61,7 +61,6 @@ int main(){
     }
 
     while(1){
-
         // add every socket to the select statement
         FD_ZERO(&read_fds);
         int max_socket = listen_socket;
@@ -74,6 +73,7 @@ int main(){
             }
         }
         FD_SET(listen_socket,&read_fds);
+        FD_SET(STDIN_FILENO, &read_fds);
         int i = select(max_socket+1, &read_fds, NULL, NULL, NULL);
 
         // if LISTEN socket -- connect the client to the server
@@ -99,7 +99,8 @@ int main(){
         }
 
         // if input to the server, handle commands for the server
-        else if (FD_ISSET(fileno(stdin), &read_fds)) {
+        else if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+            // printf("server_command called\n");
             server_command(game);
         }
 
