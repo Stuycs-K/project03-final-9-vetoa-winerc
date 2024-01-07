@@ -143,20 +143,13 @@ int main(){
         game->client_sockets[i] = -1;
     }
 
-    while(1){
-        // add every socket to the select statement
+    // add every socket to the select statement
         FD_ZERO(&read_fds);
         int max_socket = listen_socket;
-        for (int i = 0; i < MAX_CLIENTS; i++) {
-            if (game->client_sockets[i] != -1) {
-                FD_SET(game->client_sockets[i], &read_fds);
-                if (game->client_sockets[i] > max_socket) {
-                    max_socket = game->client_sockets[i];
-                }
-            }
-        }
         FD_SET(listen_socket,&read_fds);
         FD_SET(STDIN_FILENO, &read_fds);
+
+    while(1){
         int i = select(max_socket+1, &read_fds, NULL, NULL, NULL);
 
         // if LISTEN socket -- connect the client to the server
@@ -177,6 +170,19 @@ int main(){
                         break;
                     }
                 }
+                // add every socket to the select statement
+                FD_ZERO(&read_fds);
+                int max_socket = listen_socket;
+                for (int i = 0; i < MAX_CLIENTS; i++) {
+                    if (game->client_sockets[i] != -1) {
+                        FD_SET(game->client_sockets[i], &read_fds);
+                        if (game->client_sockets[i] > max_socket) {
+                            max_socket = game->client_sockets[i];
+                        }
+                    }
+                }
+                FD_SET(listen_socket,&read_fds);
+                FD_SET(STDIN_FILENO, &read_fds);
                 printf("total clients connected: %d\n", game->num_clients);
             }
         }
