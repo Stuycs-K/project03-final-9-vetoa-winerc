@@ -35,8 +35,13 @@ struct game_info* change_gamemode(struct game_info* game) {
     return game;
 }
 
+/*
+    Arguments: the current game info struct
+    Behavior: Prompts the user for input for a new chooser, then changes the game info
+    Returns: The new game info struct
+*/
 struct game_info* change_chooser(struct game_info* game) {
-    printf("old chooser: %d\n", game->chooser);
+    // printf("old chooser: %d\n", game->chooser);
     printf("Enter the index of the new chooser: ");
     char buff[3];
     fgets(buff, 3, stdin);
@@ -48,8 +53,33 @@ struct game_info* change_chooser(struct game_info* game) {
     else {
         printf("new chooser doesn't exist, command failed\n");
     }
-    printf("new chooser: %d\n", game->chooser);
+    // printf("new chooser: %d\n", game->chooser);
     return game;
+}
+
+/*
+    Arguments: the current game info struct
+    Behavior: prints the information from the struct in human-readable format
+    Returns: none
+*/
+void print_status(struct game_info* game) {
+    printf("--------------Current Game Status--------------\n");
+    if (game->gamemode == COMPUTER_CHOOSING) {
+        printf("Gamemode: computer choosing\n");
+    }
+    else {
+        printf("Gamemode: user choosing\n");
+    }
+    for (int i = 0; i < game->num_clients; i++) {
+        printf("[%d]: %s", i, game->usernames[i]);
+        if (i == game->chooser && game->gamemode == USER_CHOOSING) {
+            printf(" (chooser)\n");
+        }
+        else {
+            printf("\n");
+        }
+    }
+    printf("-----------------------------------------------\n");
 }
 
 /*
@@ -79,8 +109,14 @@ struct game_info* server_command(struct game_info* game) {
     else if (strcmp(command, "chooser") == 0) {
         game = change_chooser(game);
     }
+    else if (strcmp(command, "status") == 0) {
+        print_status(game);
+    }
+    else if (strcmp(command, "quit") == 0) {
+        exit(0);
+    }
     else {
-        printf("Invalid command. For instructions, type 'help'\n");
+        printf("Invalid command. For instructions, type 'help'.\n");
     }
     return game;
 }

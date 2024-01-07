@@ -15,6 +15,7 @@ void client_command(int client_socket, struct game_info* game);
 struct game_info* server_command(struct game_info* game);
 struct game_info* change_gamemode(struct game_info* game);
 struct game_info* change_chooser(struct game_info* game);
+void print_status(struct game_info* game);
 #endif
 
 #define COMPUTER_CHOOSING 0
