@@ -17,6 +17,7 @@ In class: Added struct for game info that can be used for executing user and ser
 At home: Finished all server command implementations: starting the game, changing gamemode, changing chooser, printing game status, and exiting, along with a help message for confused users. Implemented the initial client structure and tested to make sure that clients could connect to the server successfully. Client-server infrastructure is up and running, ready to implement hangman once the game is ready. Created a new struct for the game info so as not to pass multiple arguments every time. Planned client behavior for tomorrow. 90min.
 
 ### 2024-01-08
+In class: support for guessing words from the client. Started brainstorming chat server. Helped Charlie with the implementation of the struct game_info* functions in hangman.h.
 At home: Added support for client commands 'help', 'quit', and 'guess'. Guess is waiting on the hangman game implementation but the server-client interaction works. Have to discuss how guessing and game setup will work in hangman. 25min.
 
 ## Charlie
