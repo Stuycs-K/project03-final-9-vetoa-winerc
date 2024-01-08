@@ -2,6 +2,7 @@
 
 void clientLogic(int server_socket){
   char input[WORD_SIZE];
+  char buff[WORD_SIZE];
   printf("enter a command: ");
   fgets(input, WORD_SIZE, stdin);
   input[strcspn(input, "\n")] = 0;
@@ -17,6 +18,20 @@ void clientLogic(int server_socket){
   else if (strcmp(input, "quit") == 0) {
     write(server_socket, "quit", 5);
     exit(0);
+  }
+  else if (strcmp(input, "guess") == 0) {
+    write(server_socket, "guess", 6);
+    usleep(50);
+    read(server_socket, buff, WORD_SIZE);
+    if (strcmp(buff, "no") == 0) {
+        printf("Wait for your turn!\n");
+    }
+    else if (strcmp(buff, "yes") == 0) {
+        printf("guess a letter: ");
+        fgets(input, WORD_SIZE, stdin);
+        input[strcspn(input, "\n")] = 0;
+        write(server_socket, input, WORD_SIZE);
+    }
   }
   else {
     printf("Invalid command. Type 'help' for a list of commands.\n");
