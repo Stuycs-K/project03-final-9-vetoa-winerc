@@ -3,15 +3,20 @@
 #include "networking.h"
 
 /*
-    Arguments: the file descriptor of the socket connection that the command is coming from
+    Arguments: the index of the socket with the command, a struct with the game info
     Behavior: Handles the command (if it is a command) or produces an error message
     Returns: none
 */
-void client_command(int client_socket, struct game_info* game) {
+void client_command(int index, struct game_info* game) {
     printf("recieved command from client\n");
     char buff[WORD_SIZE];
-    read(client_socket, buff, WORD_SIZE);
-    write(client_socket, "received message\n", WORD_SIZE);
+    read(game->client_sockets[index], buff, WORD_SIZE);
+    if (strcmp(buff, "quit") == 0) {
+        game->client_sockets[index] = -1;
+        game->usernames[index] = "";
+        game->num_clients--;
+        printf("client disconnected.\n");
+    }
 }
 
 /*
@@ -195,7 +200,7 @@ int main(){
         else {
             for(int i = 0; i < MAX_CLIENTS; i++) {
                 if (FD_ISSET(game->client_sockets[i], &read_fds)) {
-                    client_command(game->client_sockets[i], game);
+                    client_command(i, game);
                 }
             }
         }

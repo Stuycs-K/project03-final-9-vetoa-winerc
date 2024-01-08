@@ -4,11 +4,23 @@ void clientLogic(int server_socket){
   char input[WORD_SIZE];
   printf("enter a command: ");
   fgets(input, WORD_SIZE, stdin);
+
+  // command logic
+  // check which command
+  if (strcmp(input, "help") == 0) {
+    printf("To send a message, type 'chat'\n");
+    printf("To make a letter guess, type 'guess'\n");
+    printf("To make a word guess, type 'guess-word'\n");
+    printf("To exit the game, type 'quit'\n");
+  }
+  else if (strcmp(input, "quit") == 0) {
+    write(server_socket, "quit", 5);
+    exit(0);
+  }
+  else {
+    printf("Invalid command. Type 'help' for a list of commands.\n");
+  }
   
-  error(write(server_socket, input, WORD_SIZE), "client: writing to server failed");
-  // printf("written to client\n");
-  usleep(50);
-  error(read(server_socket, input, WORD_SIZE), "client: reading from server failed");
   printf("string from server: %s", input);
 }
 
