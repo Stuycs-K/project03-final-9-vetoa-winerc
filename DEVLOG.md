@@ -37,7 +37,7 @@ In class: Handling for guess progress. Guesses are stored in a separate buffer t
 ### 2024-01-07
 At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.\
 
-### 2024-01-07
+### 2024-01-08
 In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
 
 
