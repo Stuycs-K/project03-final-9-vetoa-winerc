@@ -11,6 +11,7 @@ char checkLetterGuess(char letter) {
     char word[21];//max word length of 20 characters
     char guessProgress[21]; //guess progress (asterisks represent unknowns)
     int result = 0;
+    int guesses = 0;
 
     file = fopen("word.txt", "r+"); //use r+ to read and write
     if(file == NULL) err(16);
@@ -24,6 +25,11 @@ char checkLetterGuess(char letter) {
       guessProgress[strlen(word)] = '\0';
     }
 
+    if(fscanf(file, "%d", &guesses) != 1) {
+      guesses = 0;
+    }
+    guesses++;
+
     for(int i = 0; word[i] != '\0'; i++) {
       if(word[i] == letter) {
         guessProgress[i] = letter;
@@ -32,7 +38,7 @@ char checkLetterGuess(char letter) {
     }
 
     rewind(file); // go back to the start of the file so you can overwrite guessprogress.
-    fprintf(file,"%s\n%s\n",word, guessProgress);
+    fprintf(file,"%s\n%s\n%d\n",word, guessProgress, guesses);
     fclose(file);
     guessResult(result);
     return result;
