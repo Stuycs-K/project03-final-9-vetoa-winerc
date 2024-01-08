@@ -4,6 +4,7 @@ void clientLogic(int server_socket){
   char input[WORD_SIZE];
   printf("enter a command: ");
   fgets(input, WORD_SIZE, stdin);
+  input[strcspn(input, "\n")] = 0;
 
   // command logic
   // check which command
@@ -21,7 +22,6 @@ void clientLogic(int server_socket){
     printf("Invalid command. Type 'help' for a list of commands.\n");
   }
   
-  printf("string from server: %s", input);
 }
 
 int main(int argc, char** argv) {

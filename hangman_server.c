@@ -8,14 +8,14 @@
     Returns: none
 */
 void client_command(int index, struct game_info* game) {
-    printf("recieved command from client\n");
+    // printf("recieved command from client\n");
     char buff[WORD_SIZE];
     read(game->client_sockets[index], buff, WORD_SIZE);
     if (strcmp(buff, "quit") == 0) {
         game->client_sockets[index] = -1;
         game->usernames[index] = "";
         game->num_clients--;
-        printf("client disconnected.\n");
+        printf("Client disconnected. %d clients connected.\n", game->num_clients);
     }
 }
 
