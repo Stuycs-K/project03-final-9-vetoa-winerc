@@ -11,7 +11,7 @@ struct game_info {
 #ifndef HANGMAN_H
 #define HANGMAN_H
 char checkLetterGuess(char letter);
-char checkWordGuess();
+char checkWordGuess(char* target);
 void guessResult(int result);
 void startGame(struct game_info* game);
 #endif

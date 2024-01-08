@@ -15,10 +15,12 @@ void clientLogic(int server_socket){
     printf("To make a word guess, type 'guess-word'\n");
     printf("To exit the game, type 'quit'\n");
   }
+  // quit
   else if (strcmp(input, "quit") == 0) {
     write(server_socket, "quit", 5);
     exit(0);
   }
+  // guess
   else if (strcmp(input, "guess") == 0) {
     write(server_socket, "guess", 6);
     usleep(50);
@@ -32,6 +34,25 @@ void clientLogic(int server_socket){
         input[strcspn(input, "\n")] = 0;
         write(server_socket, input, WORD_SIZE);
     }
+  }
+  // guess-word
+  else if (strcmp(input, "guess-word") == 0) {
+    write(server_socket, "guess-word", 6);
+    usleep(50);
+    read(server_socket, buff, WORD_SIZE);
+    if (strcmp(buff, "no") == 0) {
+        printf("Wait for your turn!\n");
+    }
+    else if (strcmp(buff, "yes") == 0) {
+        printf("guess a word: ");
+        fgets(input, WORD_SIZE, stdin);
+        input[strcspn(input, "\n")] = 0;
+        write(server_socket, input, WORD_SIZE);
+    }
+  }
+  else if (strcmp(input, "chat") == 0) {
+    // chat server implementation -- implement later
+    printf("chat command\n");
   }
   else {
     printf("Invalid command. Type 'help' for a list of commands.\n");

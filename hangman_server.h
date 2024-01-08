@@ -4,6 +4,7 @@ struct game_info {
     int num_clients;
     int* client_sockets;
     char** usernames;
+    int* guessing_order;
     char gamemode;
     int chooser;
     int guesser;
@@ -13,6 +14,7 @@ struct game_info {
 #ifndef HANGMAN_SERVER_H
 #define HANGMAN_SERVER_H
 void client_guess(int index, struct game_info* game);
+void client_guess_word(int index, struct game_info* game);
 void client_command(int client_socket, struct game_info* game);
 struct game_info* server_command(struct game_info* game);
 struct game_info* change_gamemode(struct game_info* game);

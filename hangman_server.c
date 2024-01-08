@@ -16,6 +16,19 @@ void client_guess(int index, struct game_info* game) {
     checkLetterGuess(guess);
 }
 
+void client_guess_word(int index, struct game_info* game) {
+    char buff[WORD_SIZE];
+    // if the user isn't the guesser
+    if (index != game->guesser) {
+        write(game->client_sockets[index], "no", 3);
+        return;
+    }
+    write(game->client_sockets[index], "yes", 4);
+    usleep(50);
+    read(game->client_sockets[index], buff, WORD_SIZE);
+    checkWordGuess(buff);
+}
+
 /*
     Arguments: the index of the socket with the command, a struct with the game info
     Behavior: Handles the command (if it is a command) or produces an error message
@@ -33,6 +46,9 @@ void client_command(int index, struct game_info* game) {
     }
     else if (strcmp(buff, "guess") == 0) {
         client_guess(index, game);
+    }
+    else if (strcmp(buff, "guess-word") == 0) {
+        client_guess_word(index, game);
     }
 }
 
@@ -160,6 +176,7 @@ int main(){
     game->client_sockets = malloc(sizeof(int) * MAX_CLIENTS);
     game->usernames = malloc(sizeof(char*) * MAX_CLIENTS);
     game->guesser = 0;
+    game->guessing_order = NULL;
     // first user to join is automatically the chooser
     game->chooser = 0;
     for (int i = 0; i < MAX_CLIENTS; i++) {
