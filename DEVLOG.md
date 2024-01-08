@@ -30,3 +30,6 @@ At home: Finished the word guess and letter guess check methods (using fopen ins
 ### 2024-01-05
 In class: Handling for guess progress. Guesses are stored in a separate buffer that is updated each time a user makes a letter guess and written into the second line of word.txt. Unknown letters are displayed as asterisks. 40min.\
 
+### 2024-01-07
+At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.
+
