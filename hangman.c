@@ -1,4 +1,7 @@
 #include "hangman.h"
+#include "hangman_server.h"
+#include <stdlib.h>
+#include <time.h>
 
 
 void err(int line) {
@@ -40,7 +43,7 @@ char checkLetterGuess(char letter) {
     rewind(file); // go back to the start of the file so you can overwrite guessprogress.
     fprintf(file,"%s\n%s\n%d\n",word, guessProgress, guesses);
     fclose(file);
-    guessResult(result);
+    // guessResult(result);
     return result;
 }
 
@@ -69,4 +72,32 @@ void guessResult(int result) {
     printf("Correct!\n"); //printf for now
   else 
     printf("Guess is incorrect\n");
+}
+
+struct game_info* startGame(struct game_info* game) {
+  // guessing order
+  srand(time(NULL));
+  game->guessing_order = malloc(sizeof(int) * game->num_clients);
+  for (int i = 0; i < game->num_clients; i++) {
+    game->guessing_order[i] = -1;
+  }
+  for (int i = 0; i < game->num_clients; i++) {
+    // finds a random index array that hasn't been assigned
+    int j = rand() % game->num_clients;
+    while (game->guessing_order[j] != -1) {
+      j = rand() % game->num_clients;
+    }
+    game->guessing_order[j] = i;
+  }
+
+  game->guesser = game->guessing_order[0];
+  game->guesser_index = 0;
+  return game;
+}
+
+struct game_info* advanceGame(struct game_info* game) {
+  game->guesser_index++;
+  game->guesser = game->guessing_order[game->guesser_index];
+
+  return game;
 }

@@ -5,6 +5,7 @@ struct game_info {
     int* client_sockets;
     char** usernames;
     int* guessing_order;
+    int guesser_index;
     char gamemode;
     int chooser;
     int guesser;
