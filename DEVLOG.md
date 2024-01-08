@@ -17,7 +17,7 @@ In class: Added struct for game info that can be used for executing user and ser
 At home: Finished all server command implementations: starting the game, changing gamemode, changing chooser, printing game status, and exiting, along with a help message for confused users. Implemented the initial client structure and tested to make sure that clients could connect to the server successfully. Client-server infrastructure is up and running, ready to implement hangman once the game is ready. Created a new struct for the game info so as not to pass multiple arguments every time. Planned client behavior for tomorrow. 90min.
 
 ### 2024-01-08
-In class: support for guessing words from the client. Started brainstorming chat server. Helped Charlie with the implementation of the struct game_info* functions in hangman.h.
+In class: support for guessing words from the client. Started brainstorming chat server. Helped Charlie with the implementation of the struct game_info* functions in hangman.h. 40min
 At home: Added support for client commands 'help', 'quit', and 'guess'. Guess is waiting on the hangman game implementation but the server-client interaction works. Have to discuss how guessing and game setup will work in hangman. 25min.
 
 ## Charlie
@@ -35,5 +35,9 @@ At home: Finished the word guess and letter guess check methods (using fopen ins
 In class: Handling for guess progress. Guesses are stored in a separate buffer that is updated each time a user makes a letter guess and written into the second line of word.txt. Unknown letters are displayed as asterisks. 40min.\
 
 ### 2024-01-07
-At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.
+At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.\
+
+### 2024-01-07
+In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
+
 
