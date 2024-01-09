@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 void err(int line) {
   printf("hangman.c line %d: %s\n", line, strerror(errno));
   exit(1);
@@ -74,6 +73,25 @@ void guessResult(int result) {
     printf("Guess is incorrect\n");
 }
 
+struct game_info* setStartingWord(struct game_info* game) {
+  if (game->gamemode == COMPUTER_CHOOSING) {
+    game->real_word = "hangman"; // hardcoded, will change later
+  }
+  else if (game->gamemode == USER_CHOOSING) {
+    game->real_word = malloc(128);
+    write(game->client_sockets[game->chooser], "choose word", 12);
+    usleep(50);
+    read(game->client_sockets[game->chooser], game->real_word, 128);
+  }
+  // set current word based on real word
+  game->current_word = malloc(strlen(game->real_word));
+  for (int i = 0; i < strlen(game->real_word) - 1; i++) {
+    game->current_word[i] = '*';
+  }
+  game->current_word[strlen(game->real_word) - 1] = 0;
+  return game;
+} 
+
 struct game_info* startGame(struct game_info* game) {
   // guessing order
   srand(time(NULL));
@@ -92,12 +110,18 @@ struct game_info* startGame(struct game_info* game) {
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
+  // hardcoded, will change later
+  game->num_guesses = 5;
+
+  game = setStartingWord(game);
+  
   return game;
 }
 
 struct game_info* advanceGame(struct game_info* game) {
   game->guesser_index++;
   game->guesser = game->guessing_order[game->guesser_index];
+  write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
 
   return game;
 }

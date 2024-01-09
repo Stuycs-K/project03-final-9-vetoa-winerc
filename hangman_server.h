@@ -9,6 +9,9 @@ struct game_info {
     char gamemode;
     int chooser;
     int guesser;
+    char* real_word;
+    char* current_word;
+    int num_guesses;
 };
 #endif
 
