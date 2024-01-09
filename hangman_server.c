@@ -46,16 +46,14 @@ void client_guess_word(int index, struct game_info* game) {
 */
 void client_status(int index, struct game_info* game) {
     char* buff = malloc(MESSAGE_SIZE);
-    sprintf(buff, "\nThe word is %s.\n", game->current_word);
-    sprintf(buff, "There are %d guesses remaining.\n", game->num_guesses);
     if (index == game->guessing_order[game->guesser_index]) {
-        sprintf(buff, "It's your turn to guess!\n");
+        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nIt's your turn to guess!\n", game->current_word, game->num_guesses);
     }
     else if (index == game->chooser) {
-        sprintf(buff, "You're the word chooser!\n");
+        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nYou're the word chooser!\n", game->current_word, game->num_guesses);
     }
     else {
-        sprintf(buff, "It's not your turn to guess.\n");
+        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nIt's not your turn to guess.\n", game->current_word, game->num_guesses);
     }
     write(game->client_sockets[index], buff, MESSAGE_SIZE);
     free(buff);

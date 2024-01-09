@@ -26,10 +26,10 @@ struct game_info* setStartingWord(struct game_info* game) {
   }
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
-  for (int i = 0; i < strlen(game->real_word) - 1; i++) {
+  for (int i = 0; i < strlen(game->real_word); i++) {
     game->current_word[i] = '*';
   }
-  game->current_word[strlen(game->real_word) - 1] = 0;
+  game->current_word[strlen(game->real_word)] = 0;
   return game;
 }
 
