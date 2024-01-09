@@ -168,6 +168,8 @@ struct game_info* server_command(struct game_info* game) {
 int main(){
     // opens the socket for clients to connect to
     int listen_socket = server_setup();
+    printf("server command: ");
+    fflush(stdout);
     fd_set read_fds;
     struct game_info* game = malloc(sizeof(struct game_info*));
     // computer word chooser
@@ -214,7 +216,7 @@ int main(){
             else {
                 //accept the connection
                 int client_socket = server_tcp_handshake(listen_socket);
-                printf("Connected to new client\n");
+                printf("\nConnected to new client\n");
 
                 // add the new socket to the list of socket connections
                 for (int i = 0; i < MAX_CLIENTS; i++) {
@@ -225,6 +227,8 @@ int main(){
                     }
                 }
                 printf("total clients connected: %d\n", game->num_clients);
+                printf("server command: ");
+                fflush(stdout);
             }
         }
 
@@ -232,6 +236,8 @@ int main(){
         else if (FD_ISSET(STDIN_FILENO, &read_fds)) {
             // printf("server_command called\n");
             server_command(game);
+            printf("server command: ");
+            fflush(stdout);
         }
 
         //if client socket, handle the command read from the client
