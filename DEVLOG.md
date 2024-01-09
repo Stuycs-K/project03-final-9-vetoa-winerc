@@ -32,13 +32,13 @@ In class: Worked on basic hangman functions for either making a letter guess or 
 At home: Finished the word guess and letter guess check methods (using fopen instead). Fixed method so it is case insensitive. Guess methods and guess display methods are functional (will switch off printf for display once combined w/ server. 40min. 
 
 ### 2024-01-05
-In class: Handling for guess progress. Guesses are stored in a separate buffer that is updated each time a user makes a letter guess and written into the second line of word.txt. Unknown letters are displayed as asterisks. 40min.\
+In class: Handling for guess progress. Guesses are stored in a separate buffer that is updated each time a user makes a letter guess and written into the second line of word.txt. Unknown letters are displayed as asterisks. 40min.
 
 ### 2024-01-07
-At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.\
+At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.
 
 ### 2024-01-08
 In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
-At Home: Added support for starting the game. Revised so that start game and advance game match. 30min.\
+At Home: Added support for starting the game. Revised so that start game and advance game match. 30min.
 
 
