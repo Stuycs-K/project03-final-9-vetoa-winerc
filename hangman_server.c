@@ -2,6 +2,11 @@
 #include "hangman.h"
 #include "networking.h"
 
+/* 
+    Arguments: the game information, the index of the client
+    Behavior: checks if the character is included in the word
+    Returns: none
+*/
 void client_guess(int index, struct game_info* game) {
     char buff[WORD_SIZE];
     // if the user isn't the guesser
@@ -13,9 +18,14 @@ void client_guess(int index, struct game_info* game) {
     usleep(50);
     read(game->client_sockets[index], buff, WORD_SIZE);
     char guess = buff[0];
-    checkLetterGuess(guess);
+    game = checkLetterGuess(game, guess);
 }
 
+/* 
+    Arguments: the game information, the index of the client
+    Behavior: checks if the word is correct
+    Returns: none
+*/
 void client_guess_word(int index, struct game_info* game) {
     char buff[WORD_SIZE];
     // if the user isn't the guesser
@@ -26,7 +36,7 @@ void client_guess_word(int index, struct game_info* game) {
     write(game->client_sockets[index], "yes", 4);
     usleep(50);
     read(game->client_sockets[index], buff, WORD_SIZE);
-    checkWordGuess(buff);
+    game = checkWordGuess(game, buff);
 }
 
 /*
@@ -123,6 +133,9 @@ void print_status(struct game_info* game) {
             printf("\n");
         }
     }
+    printf("Correct word: %s\n", game->real_word);
+    printf("Current user word: %s\n", game->current_word);
+    printf("Num guesses remaining: %d\n", game->num_guesses);
     printf("-----------------------------------------------\n");
 }
 

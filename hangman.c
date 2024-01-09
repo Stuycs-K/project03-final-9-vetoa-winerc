@@ -1,10 +1,10 @@
 #include "hangman_server.h"
-char checkLetterGuess(char letter) {
- return '*';
+struct game_info* checkLetterGuess(struct game_info* game, char letter) {
+ return 0;
 }
 
-char checkWordGuess(char* target) {
- return '*';
+struct game_info* checkWordGuess(struct game_info* game, char* target) {
+ return 0;
 }
 
 void guessResult(int result) {

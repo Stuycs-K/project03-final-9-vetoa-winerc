@@ -10,8 +10,8 @@ struct game_info {
 
 #ifndef HANGMAN_H
 #define HANGMAN_H
-char checkLetterGuess(char letter);
-char checkWordGuess(char* target);
+struct game_info* checkLetterGuess(struct game_info* game, char letter);
+struct game_info* checkWordGuess(struct game_info* game, char* target);
 void guessResult(int result);
 void startGame(struct game_info* game);
 #endif

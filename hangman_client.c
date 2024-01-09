@@ -1,9 +1,14 @@
 #include "networking.h"
 
-void clientLogic(int server_socket){
+/*
+  Arguments: the socket to the server
+  Behavior: handles user input from the terminal, and then passes the commands along to the server
+  Returns: none
+*/
+void clientInput(int server_socket){
   char input[WORD_SIZE];
   char buff[WORD_SIZE];
-  printf("enter a command: ");
+  // printf("enter a command: ");
   fgets(input, WORD_SIZE, stdin);
   input[strcspn(input, "\n")] = 0;
 
@@ -60,6 +65,11 @@ void clientLogic(int server_socket){
   
 }
 
+void displayServerMessage(int server_socket) {
+  char buff[MESSAGE_SIZE];
+  printf("\nFrom Server:%s\n", buff);
+} 
+
 int main(int argc, char** argv) {
     char* IP = "127.0.0.1";
     if(argc>1){
@@ -67,8 +77,20 @@ int main(int argc, char** argv) {
     }
     int server_socket = client_tcp_handshake(IP);
     printf("client connected.\n");
+    fd_set read_fds;
+    FD_ZERO(&read_fds);
+    FD_SET(STDIN_FILENO, &read_fds);
+    FD_SET(server_socket, &read_fds);
     while (1) {
-        clientLogic(server_socket);
-        usleep(50);
+      printf("enter a command: ");
+      fflush(stdout);
+      int i = select(server_socket + 1, &read_fds, NULL, NULL, NULL);
+      if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+        clientInput(server_socket);
+      }
+      else if (FD_ISSET(server_socket, &read_fds)) {
+        displayServerMessage(server_socket);
+      }
+      usleep(50);
     }
 }
