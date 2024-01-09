@@ -19,6 +19,7 @@ struct game_info {
 #define HANGMAN_SERVER_H
 void client_guess(int index, struct game_info* game);
 void client_guess_word(int index, struct game_info* game);
+void client_status(int index, struct game_info* game);
 void client_command(int client_socket, struct game_info* game);
 struct game_info* server_command(struct game_info* game);
 struct game_info* change_gamemode(struct game_info* game);

@@ -39,6 +39,28 @@ void client_guess_word(int index, struct game_info* game) {
     game = checkWordGuess(game, buff);
 }
 
+/* 
+    Arguments: the index for the client socket, the game info struct
+    Behavior: gets the game status, writes it to a string, and sends the string to the client
+    Returns: none
+*/
+void client_status(int index, struct game_info* game) {
+    char* buff = malloc(MESSAGE_SIZE);
+    sprintf(buff, "\nThe word is %s.\n", game->current_word);
+    sprintf(buff, "There are %d guesses remaining.\n", game->num_guesses);
+    if (index == game->guessing_order[game->guesser_index]) {
+        sprintf(buff, "It's your turn to guess!\n");
+    }
+    else if (index == game->chooser) {
+        sprintf(buff, "You're the word chooser!\n");
+    }
+    else {
+        sprintf(buff, "It's not your turn to guess.\n");
+    }
+    write(game->client_sockets[index], buff, MESSAGE_SIZE);
+    free(buff);
+}
+
 /*
     Arguments: the index of the socket with the command, a struct with the game info
     Behavior: Handles the command (if it is a command) or produces an error message
@@ -53,6 +75,9 @@ void client_command(int index, struct game_info* game) {
         game->usernames[index] = "";
         game->num_clients--;
         printf("Client disconnected. %d clients connected.\n", game->num_clients);
+    }
+    else if (strcmp(buff, "status") == 0) {
+        client_status(index, game);
     }
     else if (strcmp(buff, "guess") == 0) {
         client_guess(index, game);
@@ -159,6 +184,7 @@ struct game_info* server_command(struct game_info* game) {
     }
     else if (strcmp(command, "start") == 0) {
         startGame(game);
+        printf("Game started\n");
     }
     else if (strcmp(command, "gamemode") == 0) {
         game = change_gamemode(game);

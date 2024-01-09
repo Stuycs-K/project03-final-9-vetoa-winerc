@@ -16,6 +16,7 @@ void clientInput(int server_socket){
   // check which command
   if (strcmp(input, "help") == 0) {
     printf("To send a message, type 'chat'\n");
+    printf("To view the current game status, type 'status'\n");
     printf("To make a letter guess, type 'guess'\n");
     printf("To make a word guess, type 'guess-word'\n");
     printf("To exit the game, type 'quit'\n");
@@ -24,6 +25,13 @@ void clientInput(int server_socket){
   else if (strcmp(input, "quit") == 0) {
     write(server_socket, "quit", 5);
     exit(0);
+  }
+  else if (strcmp(input, "status") == 0) {
+    write(server_socket, "status", 7);
+    usleep(50);
+    char buff[MESSAGE_SIZE];
+    read(server_socket, buff, MESSAGE_SIZE);
+    printf("%s", buff);
   }
   // guess
   else if (strcmp(input, "guess") == 0) {
