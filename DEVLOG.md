@@ -21,6 +21,7 @@ In class: support for guessing words from the client. Started brainstorming chat
 At home: Added support for client commands 'help', 'quit', and 'guess'. Guess is waiting on the hangman game implementation but the server-client interaction works. Have to discuss how guessing and game setup will work in hangman. 25min.
 
 ### 2024-01-09
+In class: Client_status command for client receiving server status. Incorporated startGame and set word from Charlie's branch to start testing my functions. BUG: server can't exit before client, ctrl+C leads to weird messages: work on quit and handling for SIGQUIT.
 At home: Formatting for server command prompts and buffer flushing.
 
 ## Charlie
