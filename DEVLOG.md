@@ -36,3 +36,14 @@ In class: Handling for guess progress. Guesses are stored in a separate buffer t
 ### 2024-01-07
 At Home: Updated guess progress handling (cumulative for both letter and word guesses), fopen uses r+ now instead of r and w. Added guess amount functionality for checkletterguess (rewrites 3rd line of file for each letter guess). Need to discuss how checkwordguess will work for incrementing the guess amount tomorrow. 30 min.
 
+
+### 2024-01-08
+In Class: Incorporated game_info struct to start and advance methods. 40 min. \
+At Home: Set starting word method revised. (Using game info struct) 30min 
+
+### 2024-01-09
+In Class: Tested methods using game info struct. Resolved segfault. Working on using dictionary to gen random word. 40 min.
+
+
+
+
