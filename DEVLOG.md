@@ -39,5 +39,6 @@ At Home: Updated guess progress handling (cumulative for both letter and word gu
 
 ### 2024-01-08
 In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
+At Home: Added support for starting the game. Revised so that start game and advance game match. 30min.\
 
 
