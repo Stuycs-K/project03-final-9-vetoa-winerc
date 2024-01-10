@@ -75,6 +75,11 @@ void clientInput(int server_socket){
 
 void displayServerMessage(int server_socket) {
   char buff[MESSAGE_SIZE];
+  int i = read(server_socket, buff, MESSAGE_SIZE);
+  if (i == 0) {
+    printf("\nServer disconnected\n");
+    exit(0);
+  }
   printf("\nFrom Server:%s\n", buff);
 } 
 
@@ -85,6 +90,13 @@ int main(int argc, char** argv) {
     }
     int server_socket = client_tcp_handshake(IP);
     printf("client connected.\n");
+    // gets username
+    char username[WORD_SIZE];
+    printf("Enter your username: ");
+    fgets(username, WORD_SIZE, stdin);
+    username[strcspn(username, "\n")] = 0;
+    write(server_socket, username, WORD_SIZE);
+
     fd_set read_fds;
     FD_ZERO(&read_fds);
     FD_SET(STDIN_FILENO, &read_fds);

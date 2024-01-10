@@ -51,6 +51,11 @@ struct game_info* startGame(struct game_info* game) {
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
+  // printf("guessing order: ");
+  // for (int i = 0; i < game->num_clients; i++) {
+  //   printf(" %d ", game->guessing_order[i]);
+  // }
+  // printf("\n");
   // hardcoded, will change later
   game->num_guesses = 5;
 

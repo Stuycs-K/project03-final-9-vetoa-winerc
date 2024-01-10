@@ -144,16 +144,33 @@ void print_status(struct game_info* game) {
     else {
         printf("Gamemode: user choosing\n");
     }
-    for (int i = 0; i < game->num_clients; i++) {
-        printf("[%d]: %s", i, game->usernames[i]);
-        if (i == game->chooser && game->gamemode == USER_CHOOSING) {
-            printf(" (chooser)\n");
+    if (game->guessing_order != NULL) {
+        printf("Guessing order:\n");
+        for (int i = 0; i < game->num_clients; i++) {
+            printf("[%d]: %s", i, game->usernames[game->guessing_order[i]]);
+            if (game->guessing_order[i] == game->chooser && game->gamemode == USER_CHOOSING) {
+                printf(" (chooser)\n");
+            }
+            else if (game->guessing_order[i] == game->guesser) {
+                printf(" (guesser)\n");
+            }
+            else {
+                printf("\n");
+            }
         }
-        else if (i == game->guesser) {
-            printf(" (guesser)\n");
-        }
-        else {
-            printf("\n");
+    }
+    else {
+        for (int i = 0; i < game->num_clients; i++) {
+            printf("[%d]: %s", i, game->usernames[i]);
+            if (i == game->chooser && game->gamemode == USER_CHOOSING) {
+                printf(" (chooser)\n");
+            }
+            else if (i == game->guesser) {
+                printf(" (guesser)\n");
+            }
+            else {
+                printf("\n");
+            }
         }
     }
     printf("Correct word: %s\n", game->real_word);
@@ -256,13 +273,13 @@ int main(){
                 printf("\nConnected to new client\n");
 
                 // add the new socket to the list of socket connections
-                for (int i = 0; i < MAX_CLIENTS; i++) {
-                    if (game->client_sockets[i] == -1) {
-                        game->client_sockets[i] = client_socket;
-                        game->num_clients++;
-                        break;
-                    }
-                }
+                game->client_sockets[game->num_clients] = client_socket;
+
+                // get client username
+                read(client_socket, game->usernames[game->num_clients], WORD_SIZE);
+                // printf("username is %s\n", game->usernames[game->num_clients]);
+
+                game->num_clients++;
                 printf("total clients connected: %d\n", game->num_clients);
                 printf("server command: ");
                 fflush(stdout);
