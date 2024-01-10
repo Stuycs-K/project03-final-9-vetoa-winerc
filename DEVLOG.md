@@ -25,6 +25,7 @@ In class: Client_status command for client receiving server status. Incorporated
 At home: Formatting for server command prompts and buffer flushing. Changed server status to include the guessing order. Incorporated usernames and server prompting for usernames. Tested shuffling guessing order in start_game. Handled server quitting before clients (see above). 45min.
 
 ### 2024-01-10
+In class: Finished message_blast and added message blasts for check user guess functions.
 At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word.
 
 ## Charlie
