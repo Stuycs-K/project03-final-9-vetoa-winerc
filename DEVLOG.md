@@ -48,4 +48,13 @@ At Home: Updated guess progress handling (cumulative for both letter and word gu
 In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
 At Home: Added support for starting the game. Revised so that start game and advance game match. 30min.
 
+### 2024-01-09
+In Class: Incorporated shell code for computer choice mode. Need to figure out dictionary. 40min.\
+At Home: Found a library for random word generation. Need to test. 20 min.
+
+
+### 2024-01-10
+In Class:
+
+
 
