@@ -12,6 +12,12 @@ struct game_info* user_start_word(struct game_info* game) {
     return game;
 }
 
+void message_blast(struct game_info *game, char *message) {
+    for (int i = 0; i < game->num_clients; i++) {
+        write(game->client_sockets[i], message, MESSAGE_SIZE);
+    }
+}
+
 /* 
     Arguments: the game information, the index of the client
     Behavior: checks if the character is included in the word
@@ -29,6 +35,10 @@ void client_guess(int index, struct game_info* game) {
     read(game->client_sockets[index], buff, WORD_SIZE);
     char guess = buff[0];
     game = checkLetterGuess(game, guess);
+
+    char message[MESSAGE_SIZE];
+    sprintf(buff, "\n%s guessed the letter %c. To view game status, type 'status'.\n", game->usernames[index], guess);
+    message_blast(game, message);
 }
 
 /* 
@@ -46,7 +56,11 @@ void client_guess_word(int index, struct game_info* game) {
     write(game->client_sockets[index], "yes", 4);
     usleep(50);
     read(game->client_sockets[index], buff, WORD_SIZE);
+    buff[strcspn(buff, "\n")] = 0;
     game = checkWordGuess(game, buff);
+    char message[MESSAGE_SIZE];
+    sprintf(buff, "\n%s guessed the word %s. To view game status, type 'status'.\n", game->usernames[index], buff);
+    message_blast(game, message);
 }
 
 /* 
