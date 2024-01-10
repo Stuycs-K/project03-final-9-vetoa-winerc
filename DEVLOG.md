@@ -24,6 +24,9 @@ At home: Added support for client commands 'help', 'quit', and 'guess'. Guess is
 In class: Client_status command for client receiving server status. Incorporated startGame and set word from Charlie's branch to start testing my functions. BUG: server can't exit before client, ctrl+C leads to weird messages: work on quit and handling for SIGQUIT. 40min.\
 At home: Formatting for server command prompts and buffer flushing. Changed server status to include the guessing order. Incorporated usernames and server prompting for usernames. Tested shuffling guessing order in start_game. Handled server quitting before clients (see above). 45min.
 
+### 2024-01-10
+At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses.
+
 ## Charlie
 
 
