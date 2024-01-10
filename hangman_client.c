@@ -65,7 +65,7 @@ void clientInput(int server_socket){
   }
   else if (strcmp(input, "chat") == 0) {
     // chat server implementation -- implement later
-    printf("chat command\n");
+    write(server_socket, "chat", 5);
   }
   else {
     printf("Invalid command. Type 'help' for a list of commands.\n");
@@ -82,11 +82,17 @@ void displayServerMessage(int server_socket) {
   }
   else if (strcmp(buff, "choose") == 0) {
     printf("\nChoose starting word: ");
-    fgets(buff, WORD_SIZE, stdin);
-    write(server_socket, buff, WORD_SIZE);
+    char startWord[WORD_SIZE];
+    fgets(startWord, WORD_SIZE, stdin);
+    write(server_socket, startWord, WORD_SIZE);
   }
   else if (strcmp(buff, "guess") == 0) {
     printf("\nIt's your turn to guess!\n");
+  }
+  else if (strcmp(buff, "chat") == 0) {
+    printf("Chat message: ");
+    fgets(buff, MESSAGE_SIZE, stdin);
+    write(server_socket, buff, MESSAGE_SIZE);
   }
   else {
     printf("\nFrom Server:\n%s", buff);

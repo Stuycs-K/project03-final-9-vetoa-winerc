@@ -2,6 +2,11 @@
 #include "hangman.h"
 #include "networking.h"
 
+/*
+    Arguments: the starting game info struct
+    Behavior: prompts the user for a word for the game
+    Returns: the new game info struct
+*/
 struct game_info* user_start_word(struct game_info* game) {
     game->real_word = malloc(WORD_SIZE);
     write(game->client_sockets[game->chooser], "choose", 7);
@@ -12,6 +17,11 @@ struct game_info* user_start_word(struct game_info* game) {
     return game;
 }
 
+/*
+    Arguments: the game info struct, the message to send to the clients
+    Behavior: Sends the message to every client in the client list
+    Returns: None
+*/
 void message_blast(struct game_info *game, char *message) {
     for (int i = 0; i < game->num_clients; i++) {
         write(game->client_sockets[i], message, MESSAGE_SIZE);
@@ -84,6 +94,22 @@ void client_status(int index, struct game_info* game) {
 }
 
 /*
+    Arguments: the index of the user submitting the chat, the struct with the game info
+    Behavior: prompts the user for a chat, broadcasts the chat to the whole server
+    Returns: none
+*/
+void client_chat(int index, struct game_info* game) {
+    write(game->client_sockets[index], "chat", 5);
+    usleep(50);
+    char buff[MESSAGE_SIZE - 40];
+    buff[strcspn(buff, "\n")] = 0;
+    read(game->client_sockets[index], buff, MESSAGE_SIZE - 40);
+    char message[MESSAGE_SIZE];
+    sprintf(message, "\n[%s]: %s\n", game->usernames[index], buff);
+    message_blast(game, message);
+}
+
+/*
     Arguments: the index of the socket with the command, a struct with the game info
     Behavior: Handles the command (if it is a command) or produces an error message
     Returns: none
@@ -106,6 +132,10 @@ void client_command(int index, struct game_info* game) {
     }
     else if (strcmp(buff, "guess-word") == 0) {
         client_guess_word(index, game);
+    }
+    else if (strcmp(buff, "chat") == 0) {
+        printf("chat received\n");
+        client_chat(index, game);
     }
 }
 
