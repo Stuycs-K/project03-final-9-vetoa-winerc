@@ -55,7 +55,7 @@ At Home: Found a library for random word generation. Need to test. 20 min.
 
 
 ### 2024-01-10
-In Class:
+In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min. \
 
-
+/usr/share/dict/words
 
