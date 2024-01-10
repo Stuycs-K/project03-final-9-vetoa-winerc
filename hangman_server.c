@@ -2,6 +2,16 @@
 #include "hangman.h"
 #include "networking.h"
 
+struct game_info* user_start_word(struct game_info* game) {
+    game->real_word = malloc(WORD_SIZE);
+    write(game->client_sockets[game->chooser], "choose", 7);
+    usleep(50);
+    read(game->client_sockets[game->chooser], game->real_word, WORD_SIZE);
+    game->real_word[strcspn(game->real_word, "\n")] = 0;
+
+    return game;
+}
+
 /* 
     Arguments: the game information, the index of the client
     Behavior: checks if the character is included in the word

@@ -18,6 +18,7 @@ struct game_info {
 
 #ifndef HANGMAN_SERVER_H
 #define HANGMAN_SERVER_H
+struct game_info* user_start_word(struct game_info* game);
 void client_guess(int index, struct game_info* game);
 void client_guess_word(int index, struct game_info* game);
 void client_status(int index, struct game_info* game);

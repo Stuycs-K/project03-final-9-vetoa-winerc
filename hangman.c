@@ -19,10 +19,7 @@ struct game_info* setStartingWord(struct game_info* game) {
     game->real_word = "hangman"; // hardcoded, will change later
   }
   else if (game->gamemode == USER_CHOOSING) {
-    game->real_word = malloc(128);
-    write(game->client_sockets[game->chooser], "choose word", 12);
-    usleep(50);
-    read(game->client_sockets[game->chooser], game->real_word, 128);
+    user_start_word(game);
   }
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));

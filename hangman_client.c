@@ -80,7 +80,17 @@ void displayServerMessage(int server_socket) {
     printf("\nServer disconnected\n");
     exit(0);
   }
-  printf("\nFrom Server:%s\n", buff);
+  else if (strcmp(buff, "choose") == 0) {
+    printf("\nChoose starting word: ");
+    fgets(buff, WORD_SIZE, stdin);
+    write(server_socket, buff, WORD_SIZE);
+  }
+  else if (strcmp(buff, "guess") == 0) {
+    printf("\nIt's your turn to guess!\n");
+  }
+  else {
+    printf("\nFrom Server:\n%s", buff);
+  }
 } 
 
 int main(int argc, char** argv) {
