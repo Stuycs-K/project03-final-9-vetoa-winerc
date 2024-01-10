@@ -47,13 +47,13 @@ void client_guess_word(int index, struct game_info* game) {
 void client_status(int index, struct game_info* game) {
     char* buff = malloc(MESSAGE_SIZE);
     if (index == game->guessing_order[game->guesser_index]) {
-        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nIt's your turn to guess!\n", game->current_word, game->num_guesses);
+        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's your turn to guess!\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     else if (index == game->chooser) {
-        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nYou're the word chooser!\n", game->current_word, game->num_guesses);
+        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nYou're the word chooser!\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     else {
-        sprintf(buff, "\nThe word is %s.\nThere are %d guesses remaining.\nIt's not your turn to guess.\n", game->current_word, game->num_guesses);
+        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's not your turn to guess.\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     write(game->client_sockets[index], buff, MESSAGE_SIZE);
     free(buff);
@@ -180,6 +180,23 @@ void print_status(struct game_info* game) {
 }
 
 /*
+    Arguments: the current game info struct
+    Behavior: prompts the server for the number of guesses they want the game to have, changes the number of guesses
+    Returns: the updated game info struct
+*/
+struct game_info* change_num_guesses(struct game_info* game) {
+    printf("Enter the number of guesses you want: ");
+    char buff[4];
+    fgets(buff, 4, stdin);
+    buff[strcspn(buff, "\n")] = 0;
+    int newGuesses = atoi(buff);
+
+    game->num_guesses = newGuesses;
+
+    return game;
+}
+
+/*
     Arguments: the struct with the current game info
     Behavior: handles commands from the server given through stdin
     Returns: the struct with the new game info
@@ -193,6 +210,7 @@ struct game_info* server_command(struct game_info* game) {
     if (strcmp(command, "help") == 0) {
         printf("To start the game, type 'start'\n");
         printf("To change gamemode, type 'gamemode'\n");
+        printf("To change the number of guesses, type 'num_guesses'\n");
         printf("To change the word chooser, type 'chooser'\n");
         printf("To get current game info, type 'status'\n");
         printf("To end the game, type 'quit'\n");
@@ -203,6 +221,9 @@ struct game_info* server_command(struct game_info* game) {
     }
     else if (strcmp(command, "gamemode") == 0) {
         game = change_gamemode(game);
+    }
+    else if (strcmp(command, "num_guesses") == 0) {
+        game = change_num_guesses(game);
     }
     else if (strcmp(command, "chooser") == 0) {
         game = change_chooser(game);
