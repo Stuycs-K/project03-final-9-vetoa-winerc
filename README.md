@@ -11,14 +11,15 @@ This is a multiplayer hangman game played using terminals. It supports 1-8 playe
   
 ### Instructions:
 Compile the program:
-```make compile```
+`make compile`
 
 To run the server:
-```make server```
+`make server`
 
-To make a client:
-```make client
-make client ARGS=IP```
+To make a client:\
+`make client`\
+`make client ARGS=IP`\
+IP is the IP address of the computer hosting the server
 
 How does the user interact with this program?
 **Start game**: 
