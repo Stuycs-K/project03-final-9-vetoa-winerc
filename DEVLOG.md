@@ -28,6 +28,9 @@ At home: Formatting for server command prompts and buffer flushing. Changed serv
 In class: Finished message_blast and added message blasts for check user guess functions. Started chat server, doesn't work. 40min.\
 At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word. Fixed chat server so it now communicates messages. BUG: when a client gets a chat, it can't send any commands afterward. BUG: ctrl+C quitting no longer works. 50min.
 
+### 2024-01-11
+At home: Finished chat server and tons of bugfixes in hangman_server, including client_status.
+
 ## Charlie
 
 
