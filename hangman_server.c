@@ -24,7 +24,9 @@ struct game_info* user_start_word(struct game_info* game) {
 */
 void message_blast(struct game_info *game, char *message) {
     for (int i = 0; i < game->num_clients; i++) {
-        write(game->client_sockets[i], message, MESSAGE_SIZE);
+        // printf("attempting to write to client %s\n", game->usernames[i]);
+        error(write(game->client_sockets[i], message, MESSAGE_SIZE), "Writing to client failed");
+        // printf("%d bytes written\n", i);
     }
 }
 
@@ -99,13 +101,11 @@ void client_status(int index, struct game_info* game) {
     Returns: none
 */
 void client_chat(int index, struct game_info* game) {
-    write(game->client_sockets[index], "chat", 5);
-    usleep(50);
     char buff[MESSAGE_SIZE - 40];
     buff[strcspn(buff, "\n")] = 0;
     read(game->client_sockets[index], buff, MESSAGE_SIZE - 40);
     char message[MESSAGE_SIZE];
-    sprintf(message, "\n[%s]: %s\n", game->usernames[index], buff);
+    sprintf(message, "[%s]: %s", game->usernames[index], buff);
     message_blast(game, message);
 }
 
@@ -134,7 +134,9 @@ void client_command(int index, struct game_info* game) {
         client_guess_word(index, game);
     }
     else if (strcmp(buff, "chat") == 0) {
-        printf("chat received\n");
+        // TEST MESSAGE BLAST
+        // message_blast(game, "MESSAGE BLAST TEST");
+        // printf("chat received\n");
         client_chat(index, game);
     }
 }

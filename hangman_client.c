@@ -66,6 +66,13 @@ void clientInput(int server_socket){
   else if (strcmp(input, "chat") == 0) {
     // chat server implementation -- implement later
     write(server_socket, "chat", 5);
+    printf("chat message: ");
+    usleep(50);
+    char buff[MESSAGE_SIZE - 40];
+    fgets(buff, MESSAGE_SIZE - 40, stdin);
+    buff[strcspn(buff, "\n")] = 0;
+    write(server_socket, buff, MESSAGE_SIZE - 40);
+    printf("[me]: %s\n", buff);
   }
   else {
     printf("Invalid command. Type 'help' for a list of commands.\n");
@@ -74,8 +81,10 @@ void clientInput(int server_socket){
 }
 
 void displayServerMessage(int server_socket) {
+  // printf("message from server received\n");
   char buff[MESSAGE_SIZE];
   int i = read(server_socket, buff, MESSAGE_SIZE);
+  // printf("buff[0]: %c\n", buff[0]);
   if (i == 0) {
     printf("\nServer disconnected\n");
     exit(0);
@@ -89,10 +98,8 @@ void displayServerMessage(int server_socket) {
   else if (strcmp(buff, "guess") == 0) {
     printf("\nIt's your turn to guess!\n");
   }
-  else if (strcmp(buff, "chat") == 0) {
-    printf("Chat message: ");
-    fgets(buff, MESSAGE_SIZE, stdin);
-    write(server_socket, buff, MESSAGE_SIZE);
+  else if (buff[1] == '[') {
+    printf("\n%s\n", buff);
   }
   else {
     printf("\nFrom Server:\n%s", buff);
