@@ -27,7 +27,9 @@ IP is the IP address of the computer hosting the server
 #### How does the user interact with this program?
 ##### Server commands: 
 *Start game*:
-```server command: start```
+```
+server command: start
+```
 *Change gamemode*:
 ```
 server command: gamemode
