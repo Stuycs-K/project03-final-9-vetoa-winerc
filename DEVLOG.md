@@ -25,7 +25,7 @@ In class: Client_status command for client receiving server status. Incorporated
 At home: Formatting for server command prompts and buffer flushing. Changed server status to include the guessing order. Incorporated usernames and server prompting for usernames. Tested shuffling guessing order in start_game. Handled server quitting before clients (see above). 45min.
 
 ### 2024-01-10
-In class: Finished message_blast and added message blasts for check user guess functions. Started chat server, doesn't work. 40min.
+In class: Finished message_blast and added message blasts for check user guess functions. Started chat server, doesn't work. 40min.\
 At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word.
 
 ## Charlie
@@ -55,4 +55,5 @@ At Home: Found a library for random word generation. Need to test. 20 min.
 
 
 ### 2024-01-10
-In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min. \
+In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min.\
+At home: Incorporated incorrect guesses into struct game_info and check letter guess, creating a string to hold the incorrect letter guesses and turning on certain characters as they're (incorrectly) guessed. 35min.
