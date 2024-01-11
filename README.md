@@ -16,21 +16,21 @@ This is a multiplayer hangman game played using terminals. It supports 1-8 playe
 **To run the server**:
 `make server`
 
-**To make a client**:\
-`make client`\
-`make client ARGS=IP`\
+**To make a client**:
+`make client`
+`make client ARGS=IP`
 IP is the IP address of the computer hosting the server
 
 #### How does the user interact with this program?
 **Server commands**:\
-*Start game*:\
+*Start game*:
 `server command: start`\
-*Change gamemode*:\
+*Change gamemode*:
 ```
 server command: gamemode
 New gamemode ('computer' or 'user'): computer
 ```
-*Change number of guesses*:\
+*Change number of guesses*:
 ```
 server command: num_guesses
 Enter the number of guesses you want: 4
