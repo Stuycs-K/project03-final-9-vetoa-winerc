@@ -2,6 +2,7 @@
 #include "hangman_server.h"
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
 void err(int line) {
   printf("hangman.c line %d: %s\n", line, strerror(errno));
@@ -10,6 +11,7 @@ void err(int line) {
 
 struct game_info* checkLetterGuess(struct game_info* game, char letter) {
   char success = 0; // not a success
+  letter = tolower(letter);
   for (int i = 0; i < strlen(game->real_word); i++) {
     if (game->real_word[i] == letter) {
       game->current_word[i] = letter;
@@ -18,6 +20,8 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
   }
 
   if (success == 0) {
+    int offset = letter - 'a';
+    game->failed_guesses[offset] = letter;
     game->num_guesses--;
   }
   return game;
@@ -25,6 +29,10 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
 
 struct game_info* checkWordGuess(struct game_info* game, char* target) {
   char success = 0;
+  for (int i = 0; i < strlen(target); i++) {
+    target[i] = tolower(target[i]);
+  }
+
   if (strcmp(game->real_word, target) == 0) {
     game->current_word = target;
     success = 1;
@@ -53,6 +61,7 @@ struct game_info* setStartingWord(struct game_info* game) {
     usleep(50);
     read(game->client_sockets[game->chooser], game->real_word, 128);
   }
+  
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
   for (int i = 0; i < strlen(game->real_word) - 1; i++) {
@@ -84,6 +93,11 @@ struct game_info* startGame(struct game_info* game) {
   game->num_guesses = 5;
 
   game = setStartingWord(game);
+  game->failed_guesses = malloc(27);
+  game->failed_guesses[26] = 0;
+  for (int i = 0; i < 26; i++) {
+    game->failed_guesses[i] = '*';
+  }
   
   return game;
 }
