@@ -1,4 +1,6 @@
 #include "networking.h"
+#include <string.h>
+#include <signal.h>
 
 /*
   Arguments: the socket to the server
@@ -14,7 +16,7 @@ void clientInput(int server_socket){
 
   // command logic
   // check which command
-  if (strcmp(input, "help") == 0) {
+  if (strcasecmp(input, "help") == 0) {
     printf("To send a message, type 'chat'\n");
     printf("To view the current game status, type 'status'\n");
     printf("To make a letter guess, type 'guess'\n");
@@ -22,11 +24,11 @@ void clientInput(int server_socket){
     printf("To exit the game, type 'quit'\n");
   }
   // quit
-  else if (strcmp(input, "quit") == 0) {
+  else if (strcasecmp(input, "quit") == 0) {
     write(server_socket, "quit", 5);
     exit(0);
   }
-  else if (strcmp(input, "status") == 0) {
+  else if (strcasecmp(input, "status") == 0) {
     write(server_socket, "status", 7);
     usleep(50);
     char buff[MESSAGE_SIZE];
@@ -34,14 +36,14 @@ void clientInput(int server_socket){
     printf("%s", buff);
   }
   // guess
-  else if (strcmp(input, "guess") == 0) {
+  else if (strcasecmp(input, "guess") == 0) {
     write(server_socket, "guess", 6);
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
-    if (strcmp(buff, "no") == 0) {
+    if (strcasecmp(buff, "no") == 0) {
         printf("Wait for your turn!\n");
     }
-    else if (strcmp(buff, "yes") == 0) {
+    else if (strcasecmp(buff, "yes") == 0) {
         printf("guess a letter: ");
         fgets(input, WORD_SIZE, stdin);
         input[strcspn(input, "\n")] = 0;
@@ -49,21 +51,21 @@ void clientInput(int server_socket){
     }
   }
   // guess-word
-  else if (strcmp(input, "guess-word") == 0) {
+  else if (strcasecmp(input, "guess-word") == 0) {
     write(server_socket, "guess-word", 6);
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
-    if (strcmp(buff, "no") == 0) {
+    if (strcasecmp(buff, "no") == 0) {
         printf("Wait for your turn!\n");
     }
-    else if (strcmp(buff, "yes") == 0) {
+    else if (strcasecmp(buff, "yes") == 0) {
         printf("guess a word: ");
         fgets(input, WORD_SIZE, stdin);
         input[strcspn(input, "\n")] = 0;
         write(server_socket, input, WORD_SIZE);
     }
   }
-  else if (strcmp(input, "chat") == 0) {
+  else if (strcasecmp(input, "chat") == 0) {
     // chat server implementation -- implement later
     write(server_socket, "chat", 5);
     printf("chat message: ");
@@ -85,17 +87,17 @@ void displayServerMessage(int server_socket) {
   char buff[MESSAGE_SIZE];
   int i = read(server_socket, buff, MESSAGE_SIZE);
   // printf("buff[0]: %c\n", buff[0]);
-  if (i == 0 || strcmp(buff, "quit") == 0) {
+  if (i == 0 || strcasecmp(buff, "quit") == 0) {
     printf("\nServer disconnected\n");
     exit(0);
   }
-  else if (strcmp(buff, "choose") == 0) {
+  else if (strcasecmp(buff, "choose") == 0) {
     printf("\nChoose starting word: ");
     char startWord[WORD_SIZE];
     fgets(startWord, WORD_SIZE, stdin);
     write(server_socket, startWord, WORD_SIZE);
   }
-  else if (strcmp(buff, "guess") == 0) {
+  else if (strcasecmp(buff, "guess") == 0) {
     printf("\nIt's your turn to guess!\n");
   }
   else if (buff[0] == '[') {

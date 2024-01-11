@@ -131,23 +131,23 @@ void client_chat(int index, struct game_info* game) {
 void client_command(int index, struct game_info* game) {
     // printf("recieved command from client\n");
     char buff[WORD_SIZE];
-    read(game->client_sockets[index], buff, WORD_SIZE);
-    if (strcmp(buff, "quit") == 0) {
+    int i = read(game->client_sockets[index], buff, WORD_SIZE);
+    if (i == 0 || strcasecmp(buff, "quit") == 0) {
         game->client_sockets[index] = -1;
         game->usernames[index] = "";
         game->num_clients--;
         printf("Client disconnected. %d clients connected.\n", game->num_clients);
     }
-    else if (strcmp(buff, "status") == 0) {
+    else if (strcasecmp(buff, "status") == 0) {
         client_status(index, game);
     }
-    else if (strcmp(buff, "guess") == 0) {
+    else if (strcasecmp(buff, "guess") == 0) {
         client_guess(index, game);
     }
-    else if (strcmp(buff, "guess-word") == 0) {
+    else if (strcasecmp(buff, "guess-word") == 0) {
         client_guess_word(index, game);
     }
-    else if (strcmp(buff, "chat") == 0) {
+    else if (strcasecmp(buff, "chat") == 0) {
         // TEST MESSAGE BLAST
         // message_blast(game, "MESSAGE BLAST TEST");
         // printf("chat received\n");
@@ -166,10 +166,10 @@ struct game_info* change_gamemode(struct game_info* game) {
     char buff[20];
     fgets(buff, 19, stdin);
     buff[strcspn(buff, "\n")] = 0;
-    if (strcmp(buff, "computer") == 0) {
+    if (strcasecmp(buff, "computer") == 0) {
         game->gamemode = COMPUTER_CHOOSING;
     }
-    else if (strcmp(buff, "user") == 0) {
+    else if (strcasecmp(buff, "user") == 0) {
         game->gamemode = USER_CHOOSING;
     }
     else {
@@ -277,7 +277,7 @@ struct game_info* server_command(struct game_info* game) {
     command[strcspn(command, "\n")] = 0;
 
     //handling commands
-    if (strcmp(command, "help") == 0) {
+    if (strcasecmp(command, "help") == 0) {
         printf("To start the game, type 'start'\n");
         printf("To change gamemode, type 'gamemode'\n");
         printf("To change the number of guesses, type 'num_guesses'\n");
@@ -285,23 +285,23 @@ struct game_info* server_command(struct game_info* game) {
         printf("To get current game info, type 'status'\n");
         printf("To end the game, type 'quit'\n");
     }
-    else if (strcmp(command, "start") == 0) {
+    else if (strcasecmp(command, "start") == 0) {
         startGame(game);
         printf("Game started\n");
     }
-    else if (strcmp(command, "gamemode") == 0) {
+    else if (strcasecmp(command, "gamemode") == 0) {
         game = change_gamemode(game);
     }
-    else if (strcmp(command, "num_guesses") == 0) {
+    else if (strcasecmp(command, "num_guesses") == 0) {
         game = change_num_guesses(game);
     }
-    else if (strcmp(command, "chooser") == 0) {
+    else if (strcasecmp(command, "chooser") == 0) {
         game = change_chooser(game);
     }
-    else if (strcmp(command, "status") == 0) {
+    else if (strcasecmp(command, "status") == 0) {
         print_status(game);
     }
-    else if (strcmp(command, "quit") == 0) {
+    else if (strcasecmp(command, "quit") == 0) {
         message_blast(game, "quit", -1);
         exit(0);
     }
@@ -314,7 +314,6 @@ struct game_info* server_command(struct game_info* game) {
 int main(){
     // opens the socket for clients to connect to
     int listen_socket = server_setup();
-    printf("server command: ");
     fflush(stdout);
     fd_set read_fds;
     struct game_info* game = malloc(sizeof(struct game_info*));
@@ -338,6 +337,8 @@ int main(){
     }
 
     while(1){
+        printf("server command: ");
+        fflush(stdout);
         // add every socket to the select statement
         FD_ZERO(&read_fds);
         int max_socket = listen_socket;
@@ -373,8 +374,6 @@ int main(){
 
                 game->num_clients++;
                 printf("total clients connected: %d\n", game->num_clients);
-                printf("server command: ");
-                fflush(stdout);
             }
         }
 
@@ -382,8 +381,6 @@ int main(){
         else if (FD_ISSET(STDIN_FILENO, &read_fds)) {
             // printf("server_command called\n");
             server_command(game);
-            printf("server command: ");
-            fflush(stdout);
         }
 
         //if client socket, handle the command read from the client
