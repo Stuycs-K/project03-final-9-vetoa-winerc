@@ -78,7 +78,7 @@ enter a command: guess-word
 ```
 enter a command: help
 ```
-*Disconnect from the game
+*Disconnect from the game*:
 ```
 enter a command: quit
 ```
