@@ -25,7 +25,11 @@ In class: Client_status command for client receiving server status. Incorporated
 At home: Formatting for server command prompts and buffer flushing. Changed server status to include the guessing order. Incorporated usernames and server prompting for usernames. Tested shuffling guessing order in start_game. Handled server quitting before clients (see above). 45min.
 
 ### 2024-01-10
-At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word.
+In class: Finished message_blast and added message blasts for check user guess functions. Started chat server, doesn't work. 40min.\
+At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word. Fixed chat server so it now communicates messages. BUG: when a client gets a chat, it can't send any commands afterward. BUG: ctrl+C quitting no longer works. 50min.
+
+### 2024-01-11
+At home: Finished chat server and tons of bugfixes in hangman_server, including client_status.
 
 ## Charlie
 
@@ -48,4 +52,11 @@ At Home: Updated guess progress handling (cumulative for both letter and word gu
 In Class: Used the struct gameinfo to start and advance games within hangman. Started planning how gameflow will work with server. 40min.\
 At Home: Added support for starting the game. Revised so that start game and advance game match. 30min.
 
+### 2024-01-09
+In Class: Incorporated shell code for computer choice mode. Need to figure out dictionary. 40min.\
+At Home: Found a library for random word generation. Need to test. 20 min.
 
+
+### 2024-01-10
+In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min.\
+At home: Incorporated incorrect guesses into struct game_info and check letter guess, creating a string to hold the incorrect letter guesses and turning on certain characters as they're (incorrectly) guessed. 35min.
