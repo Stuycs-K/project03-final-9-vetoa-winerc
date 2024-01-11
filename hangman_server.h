@@ -12,6 +12,7 @@ struct game_info {
     char* real_word;
     char* current_word;
     int num_guesses;
+    char* failed_guesses;
 };
 #endif
 
