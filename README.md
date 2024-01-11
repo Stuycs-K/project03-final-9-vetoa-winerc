@@ -53,5 +53,32 @@ server command: status
 ```
 server command: help
 ```
+*Exit the game
+```
+server command: quit
+```
 ##### Client commands: 
-
+*Send a chat message*:
+```
+enter a command: chat
+```
+*View the game status*:
+```
+enter a command: status
+```
+*Make a letter guess*:
+```
+enter a command: guess
+```
+*Make a word guess*:
+```
+enter a command: guess-word
+```
+*List of possible commands*:
+```
+enter a command: help
+```
+*Disconnect from the game
+```
+enter a command: quit
+```
