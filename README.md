@@ -11,10 +11,10 @@ This is a multiplayer hangman game played using terminals. It supports 1-8 playe
   
 ### Instructions:
 **Compile the program**:
-`make compile`
+```make compile```
 
 **To run the server**:
-`make server`
+```make server```
 
 **To make a client**:
 ```
