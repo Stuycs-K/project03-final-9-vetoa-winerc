@@ -7,12 +7,19 @@ Adrian Veto, Charlie Winer
        
 ### Project Description:
 
-This is a multiplayer hangman game played using terminals. Supports 2-8 players and has chat functionality. 
+This is a multiplayer hangman game played using terminals. It supports 1-8 players, all connected to a server using sockets. Users have the option to choose a word or have the computer choose a word for them. Guessing order is random and will progress as the game advances.
   
 ### Instructions:
+Compile the program:
+```make compile```
 
-How does the user install/compile/run the program.
-[]
+To run the server:
+```make server```
+
+To make a client:
+```make client
+make client ARGS=IP```
+
 How does the user interact with this program?
 **Start game**: 
 
