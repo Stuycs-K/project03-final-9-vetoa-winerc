@@ -85,7 +85,7 @@ void displayServerMessage(int server_socket) {
   char buff[MESSAGE_SIZE];
   int i = read(server_socket, buff, MESSAGE_SIZE);
   // printf("buff[0]: %c\n", buff[0]);
-  if (i == 0) {
+  if (i == 0 || strcmp(buff, "quit") == 0) {
     printf("\nServer disconnected\n");
     exit(0);
   }
@@ -98,8 +98,9 @@ void displayServerMessage(int server_socket) {
   else if (strcmp(buff, "guess") == 0) {
     printf("\nIt's your turn to guess!\n");
   }
-  else if (buff[1] == '[') {
+  else if (buff[0] == '[') {
     printf("\n%s\n", buff);
+    fflush(stdout);
   }
   else {
     printf("\nFrom Server:\n%s", buff);
@@ -127,11 +128,16 @@ int main(int argc, char** argv) {
     while (1) {
       printf("enter a command: ");
       fflush(stdout);
+      FD_ZERO(&read_fds);
+      FD_SET(STDIN_FILENO, &read_fds);
+      FD_SET(server_socket, &read_fds);
       int i = select(server_socket + 1, &read_fds, NULL, NULL, NULL);
       if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+        // printf("stdin command\n");
         clientInput(server_socket);
       }
       else if (FD_ISSET(server_socket, &read_fds)) {
+        // printf("server socket command\n");
         displayServerMessage(server_socket);
       }
       usleep(50);

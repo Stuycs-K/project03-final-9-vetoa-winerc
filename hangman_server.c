@@ -22,11 +22,22 @@ struct game_info* user_start_word(struct game_info* game) {
     Behavior: Sends the message to every client in the client list
     Returns: None
 */
-void message_blast(struct game_info *game, char *message) {
-    for (int i = 0; i < game->num_clients; i++) {
-        // printf("attempting to write to client %s\n", game->usernames[i]);
-        error(write(game->client_sockets[i], message, MESSAGE_SIZE), "Writing to client failed");
-        // printf("%d bytes written\n", i);
+void message_blast(struct game_info *game, char *message, int exclude_index) {
+    if (exclude_index == -1) {
+        for (int i = 0; i < game->num_clients; i++) {
+            // printf("attempting to write to client %s\n", game->usernames[i]);
+            error(write(game->client_sockets[i], message, MESSAGE_SIZE), "Writing to client failed");
+            // printf("%d bytes written\n", i);
+        }
+    }
+    else {
+        for (int i = 0; i < game->num_clients; i++) {
+            // printf("attempting to write to client %s\n", game->usernames[i]);
+            if (i != exclude_index) {
+                error(write(game->client_sockets[i], message, MESSAGE_SIZE), "Writing to client failed");
+                // printf("%d bytes written\n", i);
+            }
+        } 
     }
 }
 
@@ -50,7 +61,7 @@ void client_guess(int index, struct game_info* game) {
 
     char message[MESSAGE_SIZE];
     sprintf(buff, "\n%s guessed the letter %c. To view game status, type 'status'.\n", game->usernames[index], guess);
-    message_blast(game, message);
+    message_blast(game, message, index);
 }
 
 /* 
@@ -72,7 +83,7 @@ void client_guess_word(int index, struct game_info* game) {
     game = checkWordGuess(game, buff);
     char message[MESSAGE_SIZE];
     sprintf(buff, "\n%s guessed the word %s. To view game status, type 'status'.\n", game->usernames[index], buff);
-    message_blast(game, message);
+    message_blast(game, message, -1);
 }
 
 /* 
@@ -82,7 +93,10 @@ void client_guess_word(int index, struct game_info* game) {
 */
 void client_status(int index, struct game_info* game) {
     char* buff = malloc(MESSAGE_SIZE);
-    if (index == game->guessing_order[game->guesser_index]) {
+    if (game->guessing_order == NULL) {
+        sprintf(buff, "Game hasn't started yet!\n");
+    }
+    else if (index == game->guessing_order[game->guesser_index]) {
         sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's your turn to guess!\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     else if (index == game->chooser) {
@@ -106,7 +120,7 @@ void client_chat(int index, struct game_info* game) {
     read(game->client_sockets[index], buff, MESSAGE_SIZE - 40);
     char message[MESSAGE_SIZE];
     sprintf(message, "[%s]: %s", game->usernames[index], buff);
-    message_blast(game, message);
+    message_blast(game, message, index);
 }
 
 /*
@@ -288,6 +302,7 @@ struct game_info* server_command(struct game_info* game) {
         print_status(game);
     }
     else if (strcmp(command, "quit") == 0) {
+        message_blast(game, "quit", -1);
         exit(0);
     }
     else {
