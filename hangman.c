@@ -61,7 +61,9 @@ struct game_info* setStartingWord(struct game_info* game) {
     usleep(50);
     read(game->client_sockets[game->chooser], game->real_word, 128);
   }
-  
+  for(int i = 0; i< strlen(game->real_word); i++) {
+    game->real_word[i] = tolower(game->real_word[i]);
+  }
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
   for (int i = 0; i < strlen(game->real_word) - 1; i++) {
