@@ -10,29 +10,29 @@ Adrian Veto, Charlie Winer
 This is a multiplayer hangman game played using terminals. It supports 1-8 players, all connected to a server using sockets. Users have the option to choose a word or have the computer choose a word for them. Guessing order is random and will progress as the game advances.
   
 ### Instructions:
-Compile the program:
+**Compile the program**:
 `make compile`
 
-To run the server:
+**To run the server**:
 `make server`
 
-To make a client:\
+**To make a client**:\
 `make client`\
 `make client ARGS=IP`\
 IP is the IP address of the computer hosting the server
 
-How does the user interact with this program?
-**Start game**: 
-
-**Choose mode** (either player word or random word):
-
-**Choose word**:
-
-**Choose guess type** (either word or letter):
-
-**Make guess**:
-
-**Access chat**:
-
-**Disconnect**:
-
+#### How does the user interact with this program?
+**Server commands**:\
+*Start game*:\
+`server command: start`\\
+*Change gamemode*:\
+```
+server command: gamemode
+New gamemode ('computer' or 'user'): computer
+```\\
+*Change number of guesses*:\
+```
+server command: num_guesses
+Enter the number of guesses you want: 4
+```\\
+*Change the word chooser*:\
