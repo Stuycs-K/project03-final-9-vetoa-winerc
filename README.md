@@ -24,15 +24,15 @@ IP is the IP address of the computer hosting the server
 #### How does the user interact with this program?
 **Server commands**:\
 *Start game*:\
-`server command: start`\\
+`server command: start`\
 *Change gamemode*:\
 ```
 server command: gamemode
 New gamemode ('computer' or 'user'): computer
-```\\
+```\
 *Change number of guesses*:\
 ```
 server command: num_guesses
 Enter the number of guesses you want: 4
-```\\
+```\
 *Change the word chooser*:\
