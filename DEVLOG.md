@@ -32,6 +32,9 @@ At home: Added change_num_guesses to the server commands. Updated client_status 
 In class: Added support for client quitting with ctrl+C. Merged branch adrian onto main, fixed merge errors. Worked on documentation. 40min.\
 At home: Finished chat server and tons of bugfixes in hangman_server, including client_status. 30min.
 
+### 2024-01-12
+At home: Merged charlie onto main and fixed all merge conflicts.
+
 ## Charlie
 
 
