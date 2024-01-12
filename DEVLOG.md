@@ -59,18 +59,14 @@ At Home: Added support for starting the game. Revised so that start game and adv
 ### 2024-01-09
 In Class: Incorporated shell code for computer choice mode. Need to figure out dictionary. 40min.\
 At Home: Found a library for random word generation. Need to test. 20 min.
-<<<<<<< HEAD
-=======
-git reset --hard origin/main
->>>>>>> 075a1cc6680e70b07530aabd10be9707a8482d0f
-
 
 ### 2024-01-10
 In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min.\
 At home: Incorporated incorrect guesses into struct game_info and check letter guess, creating a string to hold the incorrect letter guesses and turning on certain characters as they're (incorrectly) guessed. 35min.
 
-
 ### 2024-01-11
 In Class: Added dictionary source file (no more theme). Bugfixes. 20min (left early for doctor) \
 At Home: Changed startGame to include support for games with user_choosing so the chooser isn't reflected in the guessing order. 30 min.
 
+### 2024-01-12
+In Class: Edited readme, bug fixes on server w/ Adrian. 40 min \
