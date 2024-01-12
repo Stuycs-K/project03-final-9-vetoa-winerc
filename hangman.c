@@ -35,6 +35,7 @@ struct game_info* checkWordGuess(struct game_info* game, char* target) {
 
   if (strcmp(game->real_word, target) == 0) {
     game->current_word = target;
+    game->num_guesses = 0;
     success = 1;
   }
   if (success == 0) {
@@ -61,9 +62,7 @@ struct game_info* setStartingWord(struct game_info* game) {
     usleep(50);
     read(game->client_sockets[game->chooser], game->real_word, 128);
   }
-  for(int i = 0; i< strlen(game->real_word); i++) {
-    game->real_word[i] = tolower(game->real_word[i]);
-  }
+  
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
   for (int i = 0; i < strlen(game->real_word) - 1; i++) {
@@ -76,23 +75,44 @@ struct game_info* setStartingWord(struct game_info* game) {
 struct game_info* startGame(struct game_info* game) {
   // guessing order
   srand(time(NULL));
-  game->guessing_order = malloc(sizeof(int) * game->num_clients);
-  for (int i = 0; i < game->num_clients; i++) {
-    game->guessing_order[i] = -1;
-  }
-  for (int i = 0; i < game->num_clients; i++) {
-    // finds a random index array that hasn't been assigned
-    int j = rand() % game->num_clients;
-    while (game->guessing_order[j] != -1) {
-      j = rand() % game->num_clients;
+  if (game->gamemode == COMPUTER_CHOOSING) {
+    game->guessing_order = malloc(sizeof(int) * game->num_clients);
+    for (int i = 0; i < game->num_clients; i++) {
+      game->guessing_order[i] = -1;
     }
-    game->guessing_order[j] = i;
+    for (int i = 0; i < game->num_clients; i++) {
+      // finds a random index array that hasn't been assigned
+      int j = rand() % game->num_clients;
+      while (game->guessing_order[j] != -1) {
+        j = rand() % game->num_clients;
+      }
+      game->guessing_order[j] = i;
+    }
+  }
+  else {
+    game->guessing_order = malloc(sizeof(int) * (game->num_clients - 1));
+    for (int i = 0; i < game->num_clients - 1; i++) {
+      game->guessing_order[i] = -1;
+    }
+    for (int i = 0; i < game->num_clients; i++) {
+      // if the user isn't the chooser
+      if (game->chooser != i) {
+        // finds a random index array that hasn't been assigned
+        int j = rand() % game->num_clients;
+        while (game->guessing_order[j] != -1) {
+          j = rand() % game->num_clients;
+        }
+        game->guessing_order[j] = i;
+    }
+    }
   }
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
-  // hardcoded, will change later
-  game->num_guesses = 5;
+  // if hasn't set the num guesses, change it to 5 
+  if (game->num_guesses == 0) {
+    game->num_guesses = 5;
+  }
 
   game = setStartingWord(game);
   game->failed_guesses = malloc(27);
