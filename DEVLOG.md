@@ -56,6 +56,10 @@ At Home: Added support for starting the game. Revised so that start game and adv
 ### 2024-01-09
 In Class: Incorporated shell code for computer choice mode. Need to figure out dictionary. 40min.\
 At Home: Found a library for random word generation. Need to test. 20 min.
+<<<<<<< HEAD
+=======
+git reset --hard origin/main
+>>>>>>> 075a1cc6680e70b07530aabd10be9707a8482d0f
 
 
 ### 2024-01-10
