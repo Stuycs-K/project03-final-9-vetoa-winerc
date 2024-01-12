@@ -48,23 +48,34 @@ void message_blast(struct game_info *game, char *message, int exclude_index) {
 */
 void client_guess(int index, struct game_info* game) {
     char buff[WORD_SIZE];
-    printf("in client_guess. index %d guesser %d\n", index, game->guesser);
+    // printf("in client_guess. index %d guesser %d\n", index, game->guesser);
     // if the user isn't the guesser
     if (index != game->guesser) {
         write(game->client_sockets[index], "no", 3);
-        printf("wrote no\n");
+        // printf("wrote no\n");
         return;
     }
     write(game->client_sockets[index], "yes", 4);
-    printf("wrote yes\n");
+    // printf("wrote yes\n");
     usleep(50);
-    read(game->client_sockets[index], buff, WORD_SIZE);
-    printf("read from client\n");
+    error(read(game->client_sockets[index], buff, WORD_SIZE), "read failed");
     char guess = buff[0];
+    // printf("1\n"); passed 1
     game = checkLetterGuess(game, guess);
+    // printf("2\n"); passed 2
 
     char message[MESSAGE_SIZE];
-    sprintf(buff, "\n%s guessed the letter %c. To view game status, type 'status'.\n", game->usernames[index], guess);
+    // printf("3\n"); //passed 3
+    // printf("%d\n", index);
+    // printf("5\n");
+    // printf("sizeof game->usernames %lu\n", strlen(game->usernames[game->guessing_order[index]]));
+    // printf("%s\n", game->usernames[index]); // fails
+    sprintf(message, "\nGuessed the letter %c. To view game status, type 'status'.\n", guess);
+    // printf("4\n");
+    printf("%s\n", message);
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        printf("client: %d\n", game->client_sockets[i]);
+    }
     message_blast(game, message, index);
 }
 
@@ -132,7 +143,7 @@ void client_chat(int index, struct game_info* game) {
     Returns: none
 */
 void client_command(int index, struct game_info* game) {
-    printf("recieved command from client\n");
+    // printf("recieved command from client\n");
     char buff[WORD_SIZE];
     int i = read(game->client_sockets[index], buff, WORD_SIZE);
     if (i == 0 || strcasecmp(buff, "quit") == 0) {
@@ -145,7 +156,7 @@ void client_command(int index, struct game_info* game) {
         client_status(index, game);
     }
     else if (strcasecmp(buff, "guess") == 0) {
-        printf("received guess\n");
+        // printf("received guess\n");
         client_guess(index, game);
     }
     else if (strcasecmp(buff, "guess-word") == 0) {
