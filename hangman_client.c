@@ -38,8 +38,10 @@ void clientInput(int server_socket){
   // guess
   else if (strcasecmp(input, "guess") == 0) {
     write(server_socket, "guess", 6);
+    printf("wrote to server\n");
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
+    printf("read from server\n");
     if (strcasecmp(buff, "no") == 0) {
         printf("Wait for your turn!\n");
     }
