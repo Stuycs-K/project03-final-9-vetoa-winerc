@@ -7,7 +7,7 @@ Adrian Veto, Charlie Winer
        
 ### Project Description:
 
-This is a multiplayer hangman game played using terminals. It supports 1-8 players, all connected to a server using sockets. Users have the option to choose a word or have the computer choose a word for them. Guessing order is random and will progress as the game advances.
+This is a multiplayer hangman game played using terminals. It supports 1-8 players, all connected to a server using sockets. Users have the option to choose a word or have the computer choose a word for them. With computer choice mode, users can choose the length of the random word (from 4 to 15), and the desired "theme" (from ___ ____ ___ or ____)  Guessing order is random and will progress as the game advances. Users can access a chat server at any time during the game. 
   
 ### Instructions:
 **Compile the program**:
@@ -39,6 +39,11 @@ New gamemode ('computer' or 'user'): computer
 ```
 server command: num_guesses
 Enter the number of guesses you want: 4
+```
+*Change word theme*:
+```
+server command: word_theme
+Enter the word theme you want. (The options are ___ ___ __ or ___):
 ```
 *Change the word chooser*:
 ```
