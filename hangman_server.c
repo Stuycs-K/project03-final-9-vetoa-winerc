@@ -390,6 +390,7 @@ int main(){
                     client_command(i, game);
                 }
             }
+            printf("\n");
         }
     }
     return 0;
