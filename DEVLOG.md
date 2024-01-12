@@ -29,7 +29,8 @@ In class: Finished message_blast and added message blasts for check user guess f
 At home: Added change_num_guesses to the server commands. Updated client_status to include incorrect guesses. Added support for user choosing the word. Fixed chat server so it now communicates messages. BUG: when a client gets a chat, it can't send any commands afterward. BUG: ctrl+C quitting no longer works. 50min.
 
 ### 2024-01-11
-At home: Finished chat server and tons of bugfixes in hangman_server, including client_status.
+In class: Added support for client quitting with ctrl+C. Merged branch adrian onto main, fixed merge errors. Worked on documentation. 40min.\
+At home: Finished chat server and tons of bugfixes in hangman_server, including client_status. 30min.
 
 ## Charlie
 
@@ -60,3 +61,9 @@ At Home: Found a library for random word generation. Need to test. 20 min.
 ### 2024-01-10
 In Class: Themed computer word choice. Parse user input from stdin and select a txt from txt folder for computer choice (ex. pokemon) 40 min.\
 At home: Incorporated incorrect guesses into struct game_info and check letter guess, creating a string to hold the incorrect letter guesses and turning on certain characters as they're (incorrectly) guessed. 35min.
+
+
+### 2024-01-11
+In Class: Added dictionary source file (no more theme). Bugfixes. 20min (left early for doctor) \
+At Home: Changed startGame to include support for games with user_choosing so the chooser isn't reflected in the guessing order. 30 min.
+
