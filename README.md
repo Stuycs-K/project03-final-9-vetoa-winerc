@@ -53,7 +53,7 @@ server command: status
 ```
 server command: help
 ```
-*Exit the game
+*Exit the game*
 ```
 server command: quit
 ```
