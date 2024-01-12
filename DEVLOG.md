@@ -65,5 +65,5 @@ At home: Incorporated incorrect guesses into struct game_info and check letter g
 
 ### 2024-01-11
 In Class: Added dictionary source file (no more theme). Bugfixes. 20min (left early for doctor) \
-At Home: Changed startGame to include support for games with user_choosing so the chooser isn't reflected in the guessing order. 30 min.\
+At Home: Changed startGame to include support for games with user_choosing so the chooser isn't reflected in the guessing order. 30 min.
 
