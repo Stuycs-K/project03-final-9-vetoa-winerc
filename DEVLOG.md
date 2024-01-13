@@ -33,7 +33,8 @@ In class: Added support for client quitting with ctrl+C. Merged branch adrian on
 At home: Finished chat server and tons of bugfixes in hangman_server, including client_status. 30min.
 
 ### 2024-01-12
-At home: Merged charlie onto main and fixed all merge conflicts.
+In class: Bugfixes for changing username size and client_guess (not done). 40min.\
+At home: Merged charlie onto main and fixed all merge conflicts. 20min.
 
 ## Charlie
 
