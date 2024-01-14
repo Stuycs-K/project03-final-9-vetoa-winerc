@@ -72,6 +72,8 @@ struct game_info* checkWordGuess(struct game_info* game, char* target) {
     }
   }
 
+  game = advanceGame(game);
+
   return game;
 }
 
@@ -135,6 +137,7 @@ struct game_info* startGame(struct game_info* game) {
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
+  write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
   // if hasn't set the num guesses, change it to 5 
   if (game->num_guesses == 0) {
     game->num_guesses = 5;
