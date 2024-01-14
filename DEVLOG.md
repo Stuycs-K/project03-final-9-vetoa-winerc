@@ -36,6 +36,9 @@ At home: Finished chat server and tons of bugfixes in hangman_server, including 
 In class: Bugfixes for changing username size and client_guess (not done). 40min.\
 At home: Merged charlie onto main and fixed all merge conflicts. 20min.
 
+### 2024-01-13
+At home: Fixed client_guess and client_word_guess. Some minor formatting changes. 150min.
+
 ## Charlie
 
 
