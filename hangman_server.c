@@ -64,24 +64,15 @@ void client_guess(int index, struct game_info* game) {
     // printf("client socket[0] (3): %d\n", game->client_sockets[0]); // passed
     char guess = buff[0];
     // printf("1\n"); passed 1
-    game = checkLetterGuess(game, guess);
-    // printf("client socket[0] (4): %d\n", game->client_sockets[0]); // didn't reach
-    // printf("2\n"); passed 2
 
     char message[MESSAGE_SIZE];
-    // printf("3\n"); //passed 3
-    // printf("%d\n", index);
-    // printf("5\n");
-    // printf("sizeof game->usernames %lu\n", strlen(game->usernames[game->guessing_order[index]]));
-    // printf("%s\n", game->usernames[index]); // fails
+
     sprintf(message, "%s guessed the letter %c. To view game status, type 'status'.\n", game->usernames[index], guess);
-    // printf("4\n");
-    // printf("%s\n", message);
-    // printf("client socket[0] (5): %d\n", game->client_sockets[0]);
-    // for (int i = 0; i < MAX_CLIENTS; i++) {
-    //     printf("client: %d\n", game->client_sockets[i]);
-    // }
+
     message_blast(game, message, -1);
+
+    game = checkLetterGuess(game, guess);
+
     free(buff);
 }
 
@@ -91,19 +82,27 @@ void client_guess(int index, struct game_info* game) {
     Returns: none
 */
 void client_guess_word(int index, struct game_info* game) {
+    // printf("in client guess word\n");
     char buff[WORD_SIZE];
     if (index != game->guesser) {
-        write(game->client_sockets[index], "no", 3);
+        write(game->client_sockets[index], "no", WORD_SIZE);
+        // printf("wrote no\n");
         return;
     }
-    write(game->client_sockets[index], "yes", 4);
+    write(game->client_sockets[index], "yes", WORD_SIZE);
+    // printf("wrote yes\n");
     usleep(50);
-    read(game->client_sockets[index], buff, WORD_SIZE);
+    error(read(game->client_sockets[index], buff, WORD_SIZE), "read failed");
     buff[strcspn(buff, "\n")] = 0;
-    game = checkWordGuess(game, buff);
+
     char message[MESSAGE_SIZE];
-    sprintf(buff, "\n%s guessed the word %s. To view game status, type 'status'.\n", game->usernames[index], buff);
+    // printf("username: %s\n", game->usernames[index]);
+    // printf("buff: %s\n", buff);
+    sprintf(message, "%s guessed the word %s. To view game status, type 'status'.\n", game->usernames[index], buff);
+    // printf("message: %s\n", message);
     message_blast(game, message, -1);
+
+    game = checkWordGuess(game, buff);
 }
 
 /* 
@@ -117,13 +116,13 @@ void client_status(int index, struct game_info* game) {
         sprintf(buff, "Game hasn't started yet!\n");
     }
     else if (index == game->guessing_order[game->guesser_index]) {
-        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's your turn to guess!\n", game->current_word, game->failed_guesses, game->num_guesses);
+        sprintf(buff, "-----------------\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's your turn to guess!\n-----------------\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
-    else if (index == game->chooser) {
-        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nYou're the word chooser!\n", game->current_word, game->failed_guesses, game->num_guesses);
+    else if (index == game->chooser && game->gamemode == USER_CHOOSING) {
+        sprintf(buff, "-----------------\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nYou're the word chooser!\n-----------------\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     else {
-        sprintf(buff, "\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's not your turn to guess.\n", game->current_word, game->failed_guesses, game->num_guesses);
+        sprintf(buff, "-----------------\nThe word is %s.\nThe incorrect guesses are %s\nThere are %d guesses remaining.\nIt's not your turn to guess.\n-----------------\n", game->current_word, game->failed_guesses, game->num_guesses);
     }
     write(game->client_sockets[index], buff, MESSAGE_SIZE);
     free(buff);
@@ -157,16 +156,28 @@ void client_command(int index, struct game_info* game) {
         game->usernames[index] = "";
         game->num_clients--;
         printf("Client disconnected. %d clients connected.\n", game->num_clients);
+        printf("server command: ");
+        fflush(stdout);
     }
     else if (strcasecmp(buff, "status") == 0) {
         client_status(index, game);
     }
     else if (strcasecmp(buff, "guess") == 0) {
         // printf("received guess\n");
-        client_guess(index, game);
+        if (game->guessing_order != NULL) {
+            client_guess(index, game);
+        }
+        else {
+            write(game->client_sockets[index], "Game hasn't started!\n", MESSAGE_SIZE);
+        }
     }
     else if (strcasecmp(buff, "guess-word") == 0) {
-        client_guess_word(index, game);
+        if (game->guessing_order != NULL) {
+            client_guess_word(index, game);
+        }
+        else {
+            write(game->client_sockets[index], "Game hasn't started!\n", MESSAGE_SIZE);
+        }
     }
     else if (strcasecmp(buff, "chat") == 0) {
         // TEST MESSAGE BLAST

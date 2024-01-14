@@ -12,8 +12,13 @@ void err(int line) {
 
 struct game_info* advanceGame(struct game_info* game) {
   game->guesser_index++;
+  // max index is num clients - 1
+  if (game->guesser_index > game->num_clients - 1) {
+    game->guesser_index = 0;
+  }
   game->guesser = game->guessing_order[game->guesser_index];
   write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
+  usleep(50);
 
   return game;
 }
@@ -28,10 +33,18 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
     }
   }
 
+  if (strcmp(game->current_word, game->real_word) == 0) {
+    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
+    game->num_guesses = 0;
+  }
+
   if (success == 0) {
     int offset = letter - 'a';
     game->failed_guesses[offset] = letter;
     game->num_guesses--;
+    if (game->num_guesses == 0) {
+      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+    }
   }
 
   game = advanceGame(game);
@@ -47,11 +60,16 @@ struct game_info* checkWordGuess(struct game_info* game, char* target) {
 
   if (strcmp(game->real_word, target) == 0) {
     game->current_word = target;
+    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
     game->num_guesses = 0;
     success = 1;
   }
+
   if (success == 0) {
     game->num_guesses--;
+    if (game->num_guesses == 0) {
+      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+    }
   }
 
   return game;
