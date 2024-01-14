@@ -13,7 +13,7 @@ void err(int line) {
 struct game_info* advanceGame(struct game_info* game) {
   game->guesser_index++;
   // max index is num clients - 1
-  if (game->guesser_index > game->num_clients - 1) {
+  if (game->guesser_index > game->num_clients - 1 || (game->guesser_index > game->num_clients - 2 && game->gamemode == USER_CHOOSING)) {
     game->guesser_index = 0;
   }
   game->guesser = game->guessing_order[game->guesser_index];
@@ -89,6 +89,7 @@ struct game_info* setStartingWord(struct game_info* game) {
     game->real_word = "hangman"; // hardcoded, will change later
   }
   else if (game->gamemode == USER_CHOOSING) {
+    printf("asking %s for the starting word\n", game->usernames[game->chooser]);
     user_start_word(game);
   }
   // set current word based on real word
@@ -118,8 +119,9 @@ struct game_info* startGame(struct game_info* game) {
     }
   }
   else {
+    // printf("chooser: %d\n", game->chooser);
     game->guessing_order = malloc(sizeof(int) * (game->num_clients - 1));
-    for (int i = 0; i < game->num_clients - 1; i++) {
+    for (int i = 0; i < game->num_clients; i++) {
       game->guessing_order[i] = -1;
     }
     for (int i = 0; i < game->num_clients; i++) {
@@ -131,6 +133,7 @@ struct game_info* startGame(struct game_info* game) {
           j = rand() % game->num_clients;
         }
         game->guessing_order[j] = i;
+        // printf("assigned %s\n", game->usernames[i]);
     }
     }
   }
