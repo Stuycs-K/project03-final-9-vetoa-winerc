@@ -39,6 +39,9 @@ At home: Merged charlie onto main and fixed all merge conflicts. 20min.
 ### 2024-01-13
 At home: Fixed client_guess and client_word_guess. Some minor formatting changes. 150min.
 
+### 2024-01-14
+At home: Fixed user choosing gamemode: guessing order and selection of chooser. Fixed guessing order after game over. 20min.
+
 ## Charlie
 
 
