@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
-
 #ifndef HANGMAN_H
 #define HANGMAN_H
 void err(int line);

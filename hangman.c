@@ -1,5 +1,6 @@
 #include "hangman.h"
 #include "hangman_server.h"
+#include "networking.h"
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
@@ -7,6 +8,21 @@
 void err(int line) {
   printf("hangman.c line %d: %s\n", line, strerror(errno));
   exit(1);
+}
+
+struct game_info* advanceGame(struct game_info* game) {
+  game->guesser_index++;
+  // max index is num clients - 1
+  if (game->guesser_index > game->num_clients - 1 || (game->guesser_index > game->num_clients - 2 && game->gamemode == USER_CHOOSING)) {
+    game->guesser_index = 0;
+  }
+  game->guesser = game->guessing_order[game->guesser_index];
+  if (game->num_guesses > 0) {
+    write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
+  }
+  usleep(50);
+
+  return game;
 }
 
 struct game_info* checkLetterGuess(struct game_info* game, char letter) {
@@ -19,11 +35,22 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
     }
   }
 
+  if (strcmp(game->current_word, game->real_word) == 0) {
+    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
+    game->num_guesses = 0;
+  }
+
   if (success == 0) {
     int offset = letter - 'a';
     game->failed_guesses[offset] = letter;
     game->num_guesses--;
+    if (game->num_guesses == 0) {
+      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+    }
   }
+
+  game = advanceGame(game);
+
   return game;
 }
 
@@ -35,12 +62,19 @@ struct game_info* checkWordGuess(struct game_info* game, char* target) {
 
   if (strcmp(game->real_word, target) == 0) {
     game->current_word = target;
+    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
     game->num_guesses = 0;
     success = 1;
   }
+
   if (success == 0) {
     game->num_guesses--;
+    if (game->num_guesses == 0) {
+      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+    }
   }
+
+  game = advanceGame(game);
 
   return game;
 }
@@ -57,6 +91,7 @@ struct game_info* setStartingWord(struct game_info* game) {
     game->real_word = "hangman"; // hardcoded, will change later
   }
   else if (game->gamemode == USER_CHOOSING) {
+    printf("asking %s for the starting word\n", game->usernames[game->chooser]);
     user_start_word(game);
   }
   // set current word based on real word
@@ -86,8 +121,9 @@ struct game_info* startGame(struct game_info* game) {
     }
   }
   else {
+    // printf("chooser: %d\n", game->chooser);
     game->guessing_order = malloc(sizeof(int) * (game->num_clients - 1));
-    for (int i = 0; i < game->num_clients - 1; i++) {
+    for (int i = 0; i < game->num_clients; i++) {
       game->guessing_order[i] = -1;
     }
     for (int i = 0; i < game->num_clients; i++) {
@@ -99,12 +135,14 @@ struct game_info* startGame(struct game_info* game) {
           j = rand() % game->num_clients;
         }
         game->guessing_order[j] = i;
+        // printf("assigned %s\n", game->usernames[i]);
     }
     }
   }
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
+  write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
   // if hasn't set the num guesses, change it to 5 
   if (game->num_guesses == 0) {
     game->num_guesses = 5;
@@ -117,13 +155,5 @@ struct game_info* startGame(struct game_info* game) {
     game->failed_guesses[i] = '*';
   }
   
-  return game;
-}
-
-struct game_info* advanceGame(struct game_info* game) {
-  game->guesser_index++;
-  game->guesser = game->guessing_order[game->guesser_index];
-  write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
-
   return game;
 }

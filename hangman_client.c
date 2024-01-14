@@ -38,8 +38,10 @@ void clientInput(int server_socket){
   // guess
   else if (strcasecmp(input, "guess") == 0) {
     write(server_socket, "guess", 6);
+    // printf("wrote to server\n");
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
+    // printf("read from server\n");
     if (strcasecmp(buff, "no") == 0) {
         printf("Wait for your turn!\n");
     }
@@ -52,9 +54,11 @@ void clientInput(int server_socket){
   }
   // guess-word
   else if (strcasecmp(input, "guess-word") == 0) {
-    write(server_socket, "guess-word", 6);
+    write(server_socket, "guess-word", WORD_SIZE);
+    // printf("wrote to server\n");
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
+    // printf("read from server\n");
     if (strcasecmp(buff, "no") == 0) {
         printf("Wait for your turn!\n");
     }
@@ -87,25 +91,29 @@ void displayServerMessage(int server_socket) {
   char buff[MESSAGE_SIZE];
   int i = read(server_socket, buff, MESSAGE_SIZE);
   // printf("buff[0]: %c\n", buff[0]);
-  if (i == 0 || strcasecmp(buff, "quit") == 0) {
-    printf("\nServer disconnected\n");
+  // printf("i: %d, buff: %s\n", i, buff);
+  if (i == -1) {
+    error(-1, "reading from server failed");
+  }
+  else if (i == 0 || strcasecmp(buff, "quit") == 0) {
+    printf("\n***Server disconnected\n");
     exit(0);
   }
   else if (strcasecmp(buff, "choose") == 0) {
-    printf("\nChoose starting word: ");
+    printf("\n***Choose starting word: ");
     char startWord[WORD_SIZE];
     fgets(startWord, WORD_SIZE, stdin);
     write(server_socket, startWord, WORD_SIZE);
   }
   else if (strcasecmp(buff, "guess") == 0) {
-    printf("\nIt's your turn to guess!\n");
+    printf("\n***It's your turn to guess!\n");
   }
   else if (buff[0] == '[') {
     printf("\n%s\n", buff);
     fflush(stdout);
   }
   else {
-    printf("\nFrom Server:\n%s", buff);
+    printf("\n***%s", buff);
   }
 } 
 
@@ -127,6 +135,7 @@ int main(int argc, char** argv) {
     FD_ZERO(&read_fds);
     FD_SET(STDIN_FILENO, &read_fds);
     FD_SET(server_socket, &read_fds);
+
     while (1) {
       printf("enter a command: ");
       fflush(stdout);
