@@ -47,21 +47,25 @@ void message_blast(struct game_info *game, char *message, int exclude_index) {
     Returns: none
 */
 void client_guess(int index, struct game_info* game) {
-    char buff[WORD_SIZE];
+    char* buff = malloc(WORD_SIZE);
     // printf("in client_guess. index %d guesser %d\n", index, game->guesser);
     // if the user isn't the guesser
     if (index != game->guesser) {
-        write(game->client_sockets[index], "no", 3);
+        write(game->client_sockets[index], "no", WORD_SIZE);
         // printf("wrote no\n");
         return;
     }
-    write(game->client_sockets[index], "yes", 4);
+    // printf("client socket[0] (1): %d\n", game->client_sockets[0]); // passed
+    write(game->client_sockets[index], "yes", WORD_SIZE);
     // printf("wrote yes\n");
     usleep(50);
+    // printf("client socket[0] (2): %d\n", game->client_sockets[0]); // passed
     error(read(game->client_sockets[index], buff, WORD_SIZE), "read failed");
+    // printf("client socket[0] (3): %d\n", game->client_sockets[0]); // passed
     char guess = buff[0];
     // printf("1\n"); passed 1
     game = checkLetterGuess(game, guess);
+    // printf("client socket[0] (4): %d\n", game->client_sockets[0]); // didn't reach
     // printf("2\n"); passed 2
 
     char message[MESSAGE_SIZE];
@@ -70,13 +74,15 @@ void client_guess(int index, struct game_info* game) {
     // printf("5\n");
     // printf("sizeof game->usernames %lu\n", strlen(game->usernames[game->guessing_order[index]]));
     // printf("%s\n", game->usernames[index]); // fails
-    sprintf(message, "\nGuessed the letter %c. To view game status, type 'status'.\n", guess);
+    sprintf(message, "%s guessed the letter %c. To view game status, type 'status'.\n", game->usernames[index], guess);
     // printf("4\n");
-    printf("%s\n", message);
-    for (int i = 0; i < MAX_CLIENTS; i++) {
-        printf("client: %d\n", game->client_sockets[i]);
-    }
-    message_blast(game, message, index);
+    // printf("%s\n", message);
+    // printf("client socket[0] (5): %d\n", game->client_sockets[0]);
+    // for (int i = 0; i < MAX_CLIENTS; i++) {
+    //     printf("client: %d\n", game->client_sockets[i]);
+    // }
+    message_blast(game, message, -1);
+    free(buff);
 }
 
 /* 
@@ -352,9 +358,12 @@ int main(){
         game->client_sockets[i] = -1;
     }
 
+    printf("server command: ");
+    fflush(stdout);
+
     while(1){
-        printf("server command: ");
-        fflush(stdout);
+        // printf("server command: ");
+        // fflush(stdout);
         // add every socket to the select statement
         FD_ZERO(&read_fds);
         // printf("1\n");
@@ -404,6 +413,8 @@ int main(){
                 // for (int i = 0; i < MAX_CLIENTS; i++) {
                 //     printf("client: %d\n", game->client_sockets[i]);
                 // }
+                printf("server command: ");
+                fflush(stdout);
             }
         }
 
@@ -412,6 +423,8 @@ int main(){
             // printf("server_command called\n");
             game = server_command(game);
             // printf("OUT OF SERVER COMMAND\n");
+            printf("server command: ");
+            fflush(stdout);
         }
 
         //if client socket, handle the command read from the client
@@ -421,7 +434,9 @@ int main(){
                     client_command(i, game);
                 }
             }
-            printf("\n");
+            // printf("\n");
+            // // printf("server command: ");
+            // // fflush(stdout);
         }
     }
     return 0;
