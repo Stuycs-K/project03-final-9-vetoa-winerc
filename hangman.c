@@ -17,7 +17,9 @@ struct game_info* advanceGame(struct game_info* game) {
     game->guesser_index = 0;
   }
   game->guesser = game->guessing_order[game->guesser_index];
-  write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
+  if (game->num_guesses > 0) {
+    write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
+  }
   usleep(50);
 
   return game;
