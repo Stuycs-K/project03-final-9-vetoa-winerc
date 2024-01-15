@@ -4,23 +4,52 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 void err(int line) {
   printf("hangman.c line %d: %s\n", line, strerror(errno));
   exit(1);
 }
 
+struct game_info* endGame(struct game_info* game) {
+  char message[MESSAGE_SIZE];
+  if (game->num_guesses == 0) {
+    sprintf(message, "No more guesses. You lost! The word was %s.\n", game->real_word);
+  }
+  else {
+    sprintf(message, "You won with %d guesses remaining! The word was %s.\n", game->num_guesses, game->real_word);
+  }
+
+  message_blast(game, message, -1);
+
+  free(game->guessing_order);
+  game->guessing_order = NULL;
+  game->guesser_index = 0;
+  game->num_guesses = 0;
+  game->guesser = 0;
+  free(game->real_word);
+  game->real_word = NULL;
+  free(game->current_word);
+  game->current_word = NULL;
+  free(game->failed_guesses);
+  game->failed_guesses = NULL;
+
+  return game;
+}
+
 struct game_info* advanceGame(struct game_info* game) {
-  game->guesser_index++;
-  // max index is num clients - 1
-  if (game->guesser_index > game->num_clients - 1 || (game->guesser_index > game->num_clients - 2 && game->gamemode == USER_CHOOSING)) {
-    game->guesser_index = 0;
+  if (game->guessing_order != NULL) {
+    game->guesser_index++;
+    // max index is num clients - 1
+    if (game->guesser_index > game->num_clients - 1 || (game->guesser_index > game->num_clients - 2 && game->gamemode == USER_CHOOSING)) {
+      game->guesser_index = 0;
+    }
+    game->guesser = game->guessing_order[game->guesser_index];
+    if (game->num_guesses > 0) {
+      write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
+    }
+    usleep(50);
   }
-  game->guesser = game->guessing_order[game->guesser_index];
-  if (game->num_guesses > 0) {
-    write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
-  }
-  usleep(50);
 
   return game;
 }
@@ -35,17 +64,18 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
     }
   }
 
+  // end game stuff
   if (strcmp(game->current_word, game->real_word) == 0) {
-    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
-    game->num_guesses = 0;
+    game = endGame(game);
   }
 
   if (success == 0) {
     int offset = letter - 'a';
     game->failed_guesses[offset] = letter;
     game->num_guesses--;
+    // end game stuff
     if (game->num_guesses == 0) {
-      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+      game = endGame(game);
     }
   }
 
@@ -60,17 +90,16 @@ struct game_info* checkWordGuess(struct game_info* game, char* target) {
     target[i] = tolower(target[i]);
   }
 
+  // end game stuff
   if (strcmp(game->real_word, target) == 0) {
-    game->current_word = target;
-    message_blast(game, "YOU WIN! WORD GUESSED!\n", -1);
-    game->num_guesses = 0;
-    success = 1;
+    game = endGame(game);
   }
 
   if (success == 0) {
     game->num_guesses--;
+    // end game stuff
     if (game->num_guesses == 0) {
-      message_blast(game, "GAME OVER! YOU LOST!\n", -1);
+      game = endGame(game);
     }
   }
 
@@ -86,9 +115,27 @@ void guessResult(int result) {
     printf("Guess is incorrect\n");
 }
 
+char* computerChooseWord() {
+  char* word = malloc(WORD_SIZE);
+  // USE FOPEN AND FGETS
+  srand(time(NULL));
+  // 851 lines in dictionary file
+  int line = rand() % 851;
+  // printf("%d\n", line);
+
+  FILE* rfile = fopen("txt/words.txt", "r");
+  for (int i = 0; i < line; i++) {
+    fgets(word, WORD_SIZE, rfile);
+  }
+  word[strcspn(word, "\n")] = 0;
+  // printf("selected word: %s\n", word);
+
+  return word;
+}
+
 struct game_info* setStartingWord(struct game_info* game) {
   if (game->gamemode == COMPUTER_CHOOSING) {
-    game->real_word = "hangman"; // hardcoded, will change later
+    game->real_word = computerChooseWord();
   }
   else if (game->gamemode == USER_CHOOSING) {
     printf("asking %s for the starting word\n", game->usernames[game->chooser]);
@@ -144,7 +191,7 @@ struct game_info* startGame(struct game_info* game) {
   game->guesser_index = 0;
   write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
   // if hasn't set the num guesses, change it to 5 
-  if (game->num_guesses == 0) {
+  if (game->num_guesses <= 0) {
     game->num_guesses = 5;
   }
 
