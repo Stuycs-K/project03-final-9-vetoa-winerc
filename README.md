@@ -49,6 +49,10 @@ Enter the index of the new chooser: 1
 ```
 server command: status
 ```
+*Stop the current round*:
+```
+server command: stop
+```
 *List of possible commands*
 ```
 server command: help
@@ -82,3 +86,12 @@ enter a command: help
 ```
 enter a command: quit
 ```
+
+##### Typical round flow
+1. `make server`
+2. Connect all clients
+3. Change gamemode, chooser, or num_guesses (if applicable).
+4. `start` in server
+5. Follow all instructions for guessing in clients.
+6. Repeat step 5 until game ends.
+7. Repeat steps 3 and 4 to start a new round.
