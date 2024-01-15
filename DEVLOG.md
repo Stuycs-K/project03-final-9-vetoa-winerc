@@ -76,4 +76,7 @@ In Class: Added dictionary source file (no more theme). Bugfixes. 20min (left ea
 At Home: Changed startGame to include support for games with user_choosing so the chooser isn't reflected in the guessing order. 30 min.
 
 ### 2024-01-12
-In Class: Edited readme, bug fixes on server w/ Adrian. 40 min \
+In Class: Edited readme, bug fixes on server w/ Adrian. 40 min.
+
+### 2024-01-14
+At Home: Added endgame function and word choosing from dictionary. 40 min.\
