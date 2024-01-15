@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 void err(int line) {
   printf("hangman.c line %d: %s\n", line, strerror(errno));
@@ -26,6 +27,7 @@ struct game_info* endGame(struct game_info* game) {
   game->guesser_index = 0;
   game->num_guesses = 0;
   game->guesser = 0;
+  free(game->real_word);
   game->real_word = NULL;
   free(game->current_word);
   game->current_word = NULL;
@@ -113,9 +115,27 @@ void guessResult(int result) {
     printf("Guess is incorrect\n");
 }
 
+char* computerChooseWord() {
+  char* word = malloc(WORD_SIZE);
+  // USE FOPEN AND FGETS
+  srand(time(NULL));
+  // 851 lines in dictionary file
+  int line = rand() % 851;
+  // printf("%d\n", line);
+
+  FILE* rfile = fopen("txt/words.txt", "r");
+  for (int i = 0; i < line; i++) {
+    fgets(word, WORD_SIZE, rfile);
+  }
+  word[strcspn(word, "\n")] = 0;
+  // printf("selected word: %s\n", word);
+
+  return word;
+}
+
 struct game_info* setStartingWord(struct game_info* game) {
   if (game->gamemode == COMPUTER_CHOOSING) {
-    game->real_word = "hangman"; // hardcoded, will change later
+    game->real_word = computerChooseWord();
   }
   else if (game->gamemode == USER_CHOOSING) {
     printf("asking %s for the starting word\n", game->usernames[game->chooser]);
