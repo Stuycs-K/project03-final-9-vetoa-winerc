@@ -172,6 +172,7 @@ void client_command(int index, struct game_info* game) {
         }
     }
     else if (strcasecmp(buff, "guess-word") == 0) {
+        // printf("guess-word received\n");
         if (game->guessing_order != NULL) {
             client_guess_word(index, game);
         }
@@ -359,12 +360,14 @@ int main(){
     int listen_socket = server_setup();
     fflush(stdout);
     fd_set read_fds;
-    struct game_info* game = malloc(sizeof(struct game_info*));
-    // computer word chooser
-    game->gamemode = COMPUTER_CHOOSING;
+    struct game_info* game = malloc(sizeof(struct game_info));
+    // printf("addr gamemode: %p\n", &game->gamemode);
+    // printf("addr client_sockets: %p\n", &game->client_sockets);
     game->num_clients = 0;
-    game->client_sockets = malloc(sizeof(int) * MAX_CLIENTS);
+    game->gamemode = COMPUTER_CHOOSING;
+    game->client_sockets = (int*) malloc(sizeof(int) * MAX_CLIENTS);
     game->usernames = malloc(sizeof(char*) * MAX_CLIENTS);
+    // printf("addr *client_sockets: %p\n", game->client_sockets);
     game->guesser = 0;
     game->guessing_order = NULL;
     // first user to join is automatically the chooser
@@ -372,12 +375,14 @@ int main(){
     for (int i = 0; i < MAX_CLIENTS; i++) {
         game->usernames[i] = malloc(20);
     }
-    // printf("all memory allocated\n");
-    
     // initializes arrays of usernames and of sockets to clients
     for (int i = 0; i < MAX_CLIENTS; i++) {
         game->client_sockets[i] = -1;
+        // printf("client sockets[%d]: %d\n", i, game->client_sockets[i]);
     }
+    // printf("addr gamemode: %p\n", &game->gamemode);
+    // printf("addr client_sockets[1]: %p\n", &game->client_sockets[1]);
+    // printf("8 gamemode: %d\n", game->gamemode);
 
     printf("server command: ");
     fflush(stdout);
@@ -431,7 +436,7 @@ int main(){
                 game->num_clients++;
                 printf("Connected to new client. Total clients connected: %d\n", game->num_clients);
                 // for (int i = 0; i < MAX_CLIENTS; i++) {
-                //     printf("client: %d\n", game->client_sockets[i]);
+                //     // printf("client: %d\n", game->client_sockets[i]);
                 // }
                 printf("server command: ");
                 fflush(stdout);
