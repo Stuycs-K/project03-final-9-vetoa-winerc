@@ -326,6 +326,7 @@ struct game_info* server_command(struct game_info* game) {
         printf("To change the number of guesses, type 'num_guesses'\n");
         printf("To change the word chooser, type 'chooser'\n");
         printf("To get current game info, type 'status'\n");
+        printf("To end the current round, type 'stop'\n");
         printf("To end the game, type 'quit'\n");
     }
     else if (strcasecmp(command, "start") == 0) {
@@ -343,6 +344,10 @@ struct game_info* server_command(struct game_info* game) {
     }
     else if (strcasecmp(command, "status") == 0) {
         print_status(game);
+    }
+    else if (strcasecmp(command, "stop") == 0) {
+        game = endGame(game);
+        message_blast(game, "ROUND ENDED BY SERVER\n", -1);
     }
     else if (strcasecmp(command, "quit") == 0) {
         message_blast(game, "quit", -1);

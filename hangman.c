@@ -146,6 +146,9 @@ struct game_info* setStartingWord(struct game_info* game) {
     printf("asking %s for the starting word\n", game->usernames[game->chooser]);
     user_start_word(game);
   }
+  for (int i = 0; i < strlen(game->real_word); i++) {
+    game->real_word[i] = tolower(game->real_word[i]);
+  }
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
   for (int i = 0; i < strlen(game->real_word); i++) {
