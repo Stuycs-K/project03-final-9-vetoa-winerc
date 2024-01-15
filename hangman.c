@@ -157,6 +157,9 @@ struct game_info* setStartingWord(struct game_info* game) {
 
 struct game_info* startGame(struct game_info* game) {
   // guessing order
+  // for (int i = 0; i < 8; i++) {
+  //   printf("client %d: %d\n", i, game->client_sockets[i]);
+  // }
   srand(time(NULL));
   if (game->gamemode == COMPUTER_CHOOSING) {
     game->guessing_order = malloc(sizeof(int) * game->num_clients);
@@ -193,6 +196,8 @@ struct game_info* startGame(struct game_info* game) {
   }
   // printf("guessing order established\n"); // passes
 
+  game = setStartingWord(game);
+
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
   // printf("writing to %d\n", game->client_sockets[game->guessing_order[game->guesser_index]]);
@@ -202,7 +207,6 @@ struct game_info* startGame(struct game_info* game) {
     game->num_guesses = 5;
   }
   // printf("1\n");
-  game = setStartingWord(game);
   // printf("starting word set\n");
   game->failed_guesses = malloc(27);
   game->failed_guesses[26] = 0;
