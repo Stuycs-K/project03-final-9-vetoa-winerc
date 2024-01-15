@@ -54,7 +54,7 @@ void clientInput(int server_socket){
   }
   // guess-word
   else if (strcasecmp(input, "guess-word") == 0) {
-    write(server_socket, "guess-word", 10);
+    write(server_socket, "guess-word", 11);
     // printf("wrote to server\n");
     usleep(50);
     read(server_socket, buff, WORD_SIZE);
@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     // gets username
     char username[WORD_SIZE];
     printf("Enter your username: ");
-    fgets(username, WORD_SIZE, stdin);
+    fgets(username, 20, stdin);
     username[strcspn(username, "\n")] = 0;
     write(server_socket, username, 20);
 

@@ -85,6 +85,7 @@ struct game_info* checkLetterGuess(struct game_info* game, char letter) {
 }
 
 struct game_info* checkWordGuess(struct game_info* game, char* target) {
+  // printf("in guess-word\n");
   char success = 0;
   for (int i = 0; i < strlen(target); i++) {
     target[i] = tolower(target[i]);
@@ -134,12 +135,19 @@ char* computerChooseWord() {
 }
 
 struct game_info* setStartingWord(struct game_info* game) {
+  // printf("setting starting word\n");
+  // printf("gamemode: %d\n", game->gamemode);
   if (game->gamemode == COMPUTER_CHOOSING) {
+    // printf("in ccw\n");
     game->real_word = computerChooseWord();
+    // printf("out of ccw\n");
   }
   else if (game->gamemode == USER_CHOOSING) {
     printf("asking %s for the starting word\n", game->usernames[game->chooser]);
     user_start_word(game);
+  }
+  for (int i = 0; i < strlen(game->real_word); i++) {
+    game->real_word[i] = tolower(game->real_word[i]);
   }
   // set current word based on real word
   game->current_word = malloc(strlen(game->real_word));
@@ -152,6 +160,9 @@ struct game_info* setStartingWord(struct game_info* game) {
 
 struct game_info* startGame(struct game_info* game) {
   // guessing order
+  // for (int i = 0; i < 8; i++) {
+  //   printf("client %d: %d\n", i, game->client_sockets[i]);
+  // }
   srand(time(NULL));
   if (game->gamemode == COMPUTER_CHOOSING) {
     game->guessing_order = malloc(sizeof(int) * game->num_clients);
@@ -186,21 +197,26 @@ struct game_info* startGame(struct game_info* game) {
     }
     }
   }
+  // printf("guessing order established\n"); // passes
+
+  game = setStartingWord(game);
 
   game->guesser = game->guessing_order[0];
   game->guesser_index = 0;
+  // printf("writing to %d\n", game->client_sockets[game->guessing_order[game->guesser_index]]);
   write(game->client_sockets[game->guessing_order[game->guesser_index]], "guess", 6);
   // if hasn't set the num guesses, change it to 5 
   if (game->num_guesses <= 0) {
     game->num_guesses = 5;
   }
-
-  game = setStartingWord(game);
+  // printf("1\n");
+  // printf("starting word set\n");
   game->failed_guesses = malloc(27);
   game->failed_guesses[26] = 0;
   for (int i = 0; i < 26; i++) {
     game->failed_guesses[i] = '*';
   }
+  // printf("failed guesses set\n");
   
   return game;
 }
