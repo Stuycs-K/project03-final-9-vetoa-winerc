@@ -42,6 +42,9 @@ At home: Fixed client_guess and client_word_guess. Some minor formatting changes
 ### 2024-01-14
 At home: Fixed user choosing gamemode: guessing order and selection of chooser. Fixed guessing order after game over. 20min.
 
+### 2024-01-15
+At home: bugfixes to make everything work on lab machines, command 'stop' for ending rounds. 150min.
+
 ## Charlie
 
 
