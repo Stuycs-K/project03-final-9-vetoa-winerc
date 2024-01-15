@@ -51,12 +51,12 @@ void client_guess(int index, struct game_info* game) {
     // printf("in client_guess. index %d guesser %d\n", index, game->guesser);
     // if the user isn't the guesser
     if (index != game->guesser) {
-        write(game->client_sockets[index], "no", WORD_SIZE);
+        write(game->client_sockets[index], "no", 3);
         // printf("wrote no\n");
         return;
     }
     // printf("client socket[0] (1): %d\n", game->client_sockets[0]); // passed
-    write(game->client_sockets[index], "yes", WORD_SIZE);
+    write(game->client_sockets[index], "yes", 4);
     // printf("wrote yes\n");
     usleep(50);
     // printf("client socket[0] (2): %d\n", game->client_sockets[0]); // passed
@@ -85,11 +85,11 @@ void client_guess_word(int index, struct game_info* game) {
     // printf("in client guess word\n");
     char buff[WORD_SIZE];
     if (index != game->guesser) {
-        write(game->client_sockets[index], "no", WORD_SIZE);
+        write(game->client_sockets[index], "no", 3);
         // printf("wrote no\n");
         return;
     }
-    write(game->client_sockets[index], "yes", WORD_SIZE);
+    write(game->client_sockets[index], "yes", 4);
     // printf("wrote yes\n");
     usleep(50);
     error(read(game->client_sockets[index], buff, WORD_SIZE), "read failed");
@@ -168,7 +168,7 @@ void client_command(int index, struct game_info* game) {
             client_guess(index, game);
         }
         else {
-            write(game->client_sockets[index], "Game hasn't started!\n", MESSAGE_SIZE);
+            write(game->client_sockets[index], "Game hasn't started!\n", 22);
         }
     }
     else if (strcasecmp(buff, "guess-word") == 0) {
@@ -176,7 +176,7 @@ void client_command(int index, struct game_info* game) {
             client_guess_word(index, game);
         }
         else {
-            write(game->client_sockets[index], "Game hasn't started!\n", MESSAGE_SIZE);
+            write(game->client_sockets[index], "Game hasn't started!\n", 22);
         }
     }
     else if (strcasecmp(buff, "chat") == 0) {
