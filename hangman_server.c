@@ -257,6 +257,8 @@ void print_status(struct game_info* game) {
                 printf("\n");
             }
         }
+        printf("Correct word: %s\n", game->real_word);
+        printf("Current user word: %s\n", game->current_word);
     }
     else if (game->guessing_order != NULL && game->gamemode == USER_CHOOSING) {
         printf("Guessing order:\n");
@@ -270,6 +272,8 @@ void print_status(struct game_info* game) {
             }
         }
         printf("Chooser: %s\n", game->usernames[game->chooser]);
+        printf("Correct word: %s\n", game->real_word);
+        printf("Current user word: %s\n", game->current_word);
     }
     else {
         for (int i = 0; i < game->num_clients; i++) {
@@ -277,16 +281,11 @@ void print_status(struct game_info* game) {
             if (i == game->chooser && game->gamemode == USER_CHOOSING) {
                 printf(" (chooser)\n");
             }
-            else if (i == game->guesser) {
-                printf(" (guesser)\n");
-            }
             else {
                 printf("\n");
             }
         }
     }
-    printf("Correct word: %s\n", game->real_word);
-    printf("Current user word: %s\n", game->current_word);
     printf("Num guesses remaining: %d\n", game->num_guesses);
     printf("-----------------------------------------------\n");
 }
